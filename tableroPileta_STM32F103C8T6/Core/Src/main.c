@@ -21,6 +21,7 @@
 #include "main.h"
 #include "i2c.h"
 #include "rtc.h"
+#include "spi.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
@@ -48,6 +49,8 @@
 
 /* USER CODE BEGIN PV */
 extern uint8_t flag_lecturas;
+
+RTC_TimeTypeDef hora;
 
 uint8_t flag_tick = 0;
 /* USER CODE END PV */
@@ -96,7 +99,10 @@ int main(void)
   MX_RTC_Init();
   MX_USART1_UART_Init();
   MX_TIM2_Init();
+  MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
+
+  HAL_TIM_Base_Start_IT(&htim2);
 
   /* USER CODE END 2 */
 
@@ -105,6 +111,8 @@ int main(void)
   while (1)
   {
 	  if (flag_tick){ //ticks every 10 ms.
+
+		  HAL_RTC_GetTime(&hrtc, &hora, RTC_FORMAT_BIN);
 
 		  update_teclas();
 
@@ -179,6 +187,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 	if (htim->Instance == TIM2){
 		flag_tick = 1;
 	}
+}
+
+void HAL_RTC_AlarmAEventCallback(RTC_HandleTypeDef *hrtc){
+	__NOP();
 }
 /* USER CODE END 4 */
 
