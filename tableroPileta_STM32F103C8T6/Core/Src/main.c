@@ -28,6 +28,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "74HC165_SPI_lfs.h"
 #include "IOports_lfs.h"
 /* USER CODE END Includes */
 
@@ -102,7 +103,10 @@ int main(void)
   MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
 
+  spi_74HC165_init(&hspi2, OUT_PL_GPIO_Port, OUT_PL_Pin, OUT_CE_GPIO_Port, OUT_CE_Pin);
+
   HAL_TIM_Base_Start_IT(&htim2);
+
 
   /* USER CODE END 2 */
 

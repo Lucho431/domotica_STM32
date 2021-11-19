@@ -1,3 +1,3 @@
-IOports_lfs.c:16:6:lecturaTeclas	8	static
+IOports_lfs.c:16:6:lecturaTeclas	4	static
 IOports_lfs.c:28:6:update_teclas	16	static
 IOports_lfs.c:49:9:getStatBoton	16	static

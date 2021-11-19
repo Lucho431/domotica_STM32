@@ -45,29 +45,28 @@ void MX_GPIO_Init(void)
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
-  __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, OUT_tomas_Pin|OUT_luces_Pin|OUT_leds_Pin|OUT_napa_Pin
-                          |OUT_jet_Pin|OUT_pileta_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(OUT_PL_GPIO_Port, OUT_PL_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : PAPin PAPin PAPin PAPin
-                           PAPin PAPin */
-  GPIO_InitStruct.Pin = OUT_tomas_Pin|OUT_luces_Pin|OUT_leds_Pin|OUT_napa_Pin
-                          |OUT_jet_Pin|OUT_pileta_Pin;
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(OUT_CE_GPIO_Port, OUT_CE_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = OUT_PL_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+  HAL_GPIO_Init(OUT_PL_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PBPin PBPin PBPin PBPin
-                           PBPin PBPin */
-  GPIO_InitStruct.Pin = IN_tomas_Pin|IN_luces_Pin|IN_leds_Pin|IN_napa_Pin
-                          |IN_jet_Pin|IN_pileta_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = OUT_CE_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(OUT_CE_GPIO_Port, &GPIO_InitStruct);
 
 }
 

@@ -18,6 +18,22 @@ typedef enum{
 }T_INPUT;
 
 typedef enum{
+	IN_0,
+	IN_1,
+	IN_2,
+	IN_3,
+	IN_4,
+	IN_5,
+	IN_6,
+	IN_7,
+	IN_8,
+	IN_9,
+	IN_A,
+	IN_B,
+	IN_C,
+	IN_D,
+	IN_AST,
+	IN_HASH,
 	IN_tomas,
 	IN_luces,
 	IN_leds,
@@ -28,12 +44,18 @@ typedef enum{
 }T_POS_INPUT;
 
 typedef enum{
-	OUT_tomas,
-	OUT_luces,
-	OUT_leds,
-	OUT_napa,
-	OUT_jet,
-	OUT_pileta,
+	OUT_rele_tomas,
+	OUT_rele_luces,
+	OUT_rele_leds,
+	OUT_rele_napa,
+	OUT_rele_jet,
+	OUT_rele_pileta,
+	OUT_led_tomas,
+	OUT_led_luces,
+	OUT_led_leds,
+	OUT_led_napa,
+	OUT_led_jet,
+	OUT_led_pileta,
 	SIZEOF_POS_OUTPUT,
 }T_POS_OUTPUT;
 

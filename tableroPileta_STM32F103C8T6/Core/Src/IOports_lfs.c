@@ -15,12 +15,12 @@ T_INPUT status_teclas [SIZEOF_POS_INPUT];
 
 void lecturaTeclas (void){
 
-	read_teclas[IN_pileta] = HAL_GPIO_ReadPin(IN_pileta_GPIO_Port, IN_pileta_Pin);
-	read_teclas[IN_jet] = HAL_GPIO_ReadPin(IN_jet_GPIO_Port, IN_jet_Pin);
-	read_teclas[IN_napa] = HAL_GPIO_ReadPin(IN_napa_GPIO_Port, IN_napa_Pin);
-	read_teclas[IN_leds] = HAL_GPIO_ReadPin(IN_leds_GPIO_Port, IN_leds_Pin);
-	read_teclas[IN_luces] = HAL_GPIO_ReadPin(IN_luces_GPIO_Port, IN_luces_Pin);
-	read_teclas[IN_tomas] = HAL_GPIO_ReadPin(IN_tomas_GPIO_Port, IN_tomas_Pin);
+//	read_teclas[IN_pileta] = HAL_GPIO_ReadPin(IN_pileta_GPIO_Port, IN_pileta_Pin);
+//	read_teclas[IN_jet] = HAL_GPIO_ReadPin(IN_jet_GPIO_Port, IN_jet_Pin);
+//	read_teclas[IN_napa] = HAL_GPIO_ReadPin(IN_napa_GPIO_Port, IN_napa_Pin);
+//	read_teclas[IN_leds] = HAL_GPIO_ReadPin(IN_leds_GPIO_Port, IN_leds_Pin);
+//	read_teclas[IN_luces] = HAL_GPIO_ReadPin(IN_luces_GPIO_Port, IN_luces_Pin);
+//	read_teclas[IN_tomas] = HAL_GPIO_ReadPin(IN_tomas_GPIO_Port, IN_tomas_Pin);
 
 }
 

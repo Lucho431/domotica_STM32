@@ -58,30 +58,10 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define OUT_tomas_Pin GPIO_PIN_0
-#define OUT_tomas_GPIO_Port GPIOA
-#define OUT_luces_Pin GPIO_PIN_1
-#define OUT_luces_GPIO_Port GPIOA
-#define OUT_leds_Pin GPIO_PIN_2
-#define OUT_leds_GPIO_Port GPIOA
-#define OUT_napa_Pin GPIO_PIN_3
-#define OUT_napa_GPIO_Port GPIOA
-#define OUT_jet_Pin GPIO_PIN_4
-#define OUT_jet_GPIO_Port GPIOA
-#define OUT_pileta_Pin GPIO_PIN_5
-#define OUT_pileta_GPIO_Port GPIOA
-#define IN_tomas_Pin GPIO_PIN_0
-#define IN_tomas_GPIO_Port GPIOB
-#define IN_luces_Pin GPIO_PIN_1
-#define IN_luces_GPIO_Port GPIOB
-#define IN_leds_Pin GPIO_PIN_2
-#define IN_leds_GPIO_Port GPIOB
-#define IN_napa_Pin GPIO_PIN_3
-#define IN_napa_GPIO_Port GPIOB
-#define IN_jet_Pin GPIO_PIN_4
-#define IN_jet_GPIO_Port GPIOB
-#define IN_pileta_Pin GPIO_PIN_5
-#define IN_pileta_GPIO_Port GPIOB
+#define OUT_PL_Pin GPIO_PIN_12
+#define OUT_PL_GPIO_Port GPIOB
+#define OUT_CE_Pin GPIO_PIN_8
+#define OUT_CE_GPIO_Port GPIOA
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
