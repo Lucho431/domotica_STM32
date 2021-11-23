@@ -18,22 +18,22 @@ typedef enum{
 }T_INPUT;
 
 typedef enum{
-	IN_0,
 	IN_1,
 	IN_2,
 	IN_3,
+	IN_A,
 	IN_4,
 	IN_5,
 	IN_6,
+	IN_B,
 	IN_7,
 	IN_8,
 	IN_9,
-	IN_A,
-	IN_B,
 	IN_C,
-	IN_D,
 	IN_AST,
+	IN_0,
 	IN_HASH,
+	IN_D,
 	IN_tomas,
 	IN_luces,
 	IN_leds,
@@ -42,6 +42,7 @@ typedef enum{
 	IN_pileta,
 	SIZEOF_POS_INPUT,
 }T_POS_INPUT;
+
 
 typedef enum{
 	OUT_rele_tomas,
@@ -66,7 +67,7 @@ typedef enum{
 void lecturaTeclas(void);
 void update_teclas (void);
 T_INPUT getStatBoton (T_POS_INPUT);
-//int8_t getNumber (void);
+int8_t getNumber (void);
 //void botonEXTI_handler(uint16_t);
 
 void setOutput (T_POS_OUTPUT, uint8_t);
