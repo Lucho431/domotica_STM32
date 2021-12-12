@@ -7,7 +7,7 @@
 
 #include <IOports_lfs.h>
 #include "74HC165_SPI_lfs.h"
-
+#include "74_HC595_SPI_lfs.h"
 
 //macros
 #define GETBUTTONSTATUS(BUTTON,EDGE) (EDGE & (0B1 << (BUTTON)))
@@ -16,13 +16,18 @@
 
 //variables
 uint8_t flag_lecturas = 1;
+uint8_t flag_salidas = 1;
 //uint8_t read_teclas [SIZEOF_POS_BOTONES];
 //uint8_t last_teclas [SIZEOF_POS_BOTONES];
 T_INPUT status_teclas [SIZEOF_POS_INPUT];
 
-uint8_t read_teclas, last_teclas;
-uint16_t read_teclado, last_teclado;
+uint8_t read_teclas;
+uint8_t read_teclado[4];
+
 uint32_t read_input, last_input, fall_input, rise_input;
+
+uint16_t write_output;
+
 
 void turnONFila (uint8_t filaNum){
 
@@ -59,45 +64,26 @@ void turnONFila (uint8_t filaNum){
 	}//end witch
 }//end turnONFila
 
-uint8_t lecturaColumna (uint8_t columNum){
-	//acá se lee el pin correspondiente a la columna.
-	//se devuelve un 1 o 0 según corresponda.
-	switch (columNum){
-		case 0:
-			return HAL_GPIO_ReadPin(IN_colum0_GPIO_Port, IN_colum0_Pin);
-		break;
-		case 1:
-			return HAL_GPIO_ReadPin(IN_colum1_GPIO_Port, IN_colum1_Pin);
-		break;
-		case 2:
-			return HAL_GPIO_ReadPin(IN_colum2_GPIO_Port, IN_colum2_Pin);
-		break;
-		case 3:
-			return HAL_GPIO_ReadPin(IN_colum3_GPIO_Port, IN_colum3_Pin);
-		default:
-		break;
-	}//end witch
-}//end lecturaColumna()
 
 void lecturaTeclas (void){
 
+	last_input = read_input;
 
 	//pulsadores:
-	last_teclas = read_teclas;
-	spi_74HC165_receive(&read_teclas, 1);
+	spi_74HC165_receiveBotones (&read_teclas, 1);
 
-	//teclado matricial
-	last_teclado = read_teclado;
-	read_teclado = 0;
+	//teclado matricial:
+
 	for (uint8_t i = 0; i < 4; i++){
 		turnONFila(i);
-		for (uint8_t j = 0; j < 4; j++){
-			read_teclado += (lecturaColumna(j) << (i*4+j));
-		}//end for j
+		spi_74HC165_receiveTeclado(&read_teclado[i], 1);
 	}//end for i
 
-	read_input = read_teclado + (read_teclas << 16);
-	last_input = last_teclado + (read_teclas << 16);
+	read_input = (uint32_t) (read_teclas |
+							(read_teclado[0] << 6) |
+							(read_teclado[1] << 10) |
+							(read_teclado[2] << 14) |
+							(read_teclado[3] << 18));
 
 } //end lecturaTeclas()
 
@@ -154,3 +140,22 @@ int8_t getNumber (void){
 
 	return -1;
 } //end getNumber()
+
+
+void setOutput (T_POS_OUTPUT s, uint8_t val){
+
+	if (val != 0){
+		write_output |= (uint16_t)(1 << s);
+		return;
+	}else{
+		write_output &= ~( (uint16_t)(1 << s) );
+	}
+
+} //end setOutput()
+
+
+void update_outputs (void){
+
+	spi_74HC595_Transmit( (uint8_t*)&write_output, 2); // 2 bytes.
+
+}

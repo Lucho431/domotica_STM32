@@ -58,18 +58,16 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define IN_colum0_Pin GPIO_PIN_7
-#define IN_colum0_GPIO_Port GPIOA
-#define IN_colum1_Pin GPIO_PIN_0
-#define IN_colum1_GPIO_Port GPIOB
-#define IN_colum2_Pin GPIO_PIN_1
-#define IN_colum2_GPIO_Port GPIOB
-#define IN_colum3_Pin GPIO_PIN_2
-#define IN_colum3_GPIO_Port GPIOB
+#define IN_nivelAgua_Pin GPIO_PIN_2
+#define IN_nivelAgua_GPIO_Port GPIOA
 #define OUT_PL_Pin GPIO_PIN_12
 #define OUT_PL_GPIO_Port GPIOB
-#define OUT_CE_Pin GPIO_PIN_8
-#define OUT_CE_GPIO_Port GPIOA
+#define OUT_CE1_Pin GPIO_PIN_8
+#define OUT_CE1_GPIO_Port GPIOA
+#define OUT_CE2_Pin GPIO_PIN_9
+#define OUT_CE2_GPIO_Port GPIOA
+#define OUT_ST_Pin GPIO_PIN_10
+#define OUT_ST_GPIO_Port GPIOA
 #define OUT_fila3_Pin GPIO_PIN_15
 #define OUT_fila3_GPIO_Port GPIOA
 #define OUT_fila2_Pin GPIO_PIN_3

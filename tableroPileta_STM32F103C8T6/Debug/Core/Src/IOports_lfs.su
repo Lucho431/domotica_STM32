@@ -1,6 +1,7 @@
-IOports_lfs.c:27:6:turnONFila	16	static
-IOports_lfs.c:62:9:lecturaColumna	16	static
-IOports_lfs.c:82:6:lecturaTeclas	16	static
-IOports_lfs.c:105:6:update_teclas	4	static
-IOports_lfs.c:116:9:getStatBoton	16	static
-IOports_lfs.c:132:8:getNumber	4	static
+IOports_lfs.c:32:6:turnONFila	16	static
+IOports_lfs.c:68:6:lecturaTeclas	16	static
+IOports_lfs.c:91:6:update_teclas	4	static
+IOports_lfs.c:102:9:getStatBoton	16	static
+IOports_lfs.c:118:8:getNumber	4	static
+IOports_lfs.c:145:6:setOutput	16	static
+IOports_lfs.c:157:6:update_outputs	8	static

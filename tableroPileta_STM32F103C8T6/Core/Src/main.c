@@ -19,7 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "i2c.h"
+#include "adc.h"
 #include "rtc.h"
 #include "spi.h"
 #include "tim.h"
@@ -29,6 +29,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "74HC165_SPI_lfs.h"
+#include "74_HC595_SPI_lfs.h"
 #include "IOports_lfs.h"
 /* USER CODE END Includes */
 
@@ -50,7 +51,7 @@
 
 /* USER CODE BEGIN PV */
 extern uint8_t flag_lecturas;
-
+extern uint8_t flag_salidas;
 RTC_TimeTypeDef hora;
 
 uint8_t flag_tick = 0;
@@ -95,15 +96,15 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_I2C1_Init();
-  MX_I2C2_Init();
   MX_RTC_Init();
   MX_USART1_UART_Init();
   MX_TIM2_Init();
   MX_SPI2_Init();
+  MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
 
-  spi_74HC165_init(&hspi2, OUT_PL_GPIO_Port, OUT_PL_Pin, OUT_CE_GPIO_Port, OUT_CE_Pin);
+  spi_74HC165_init(&hspi2, OUT_PL_GPIO_Port, OUT_PL_Pin, OUT_CE1_GPIO_Port, OUT_CE1_Pin, OUT_CE2_GPIO_Port, OUT_CE2_Pin);
+  spi_74HC595_init(&hspi2, OUT_ST_GPIO_Port, OUT_ST_Pin);
 
   HAL_TIM_Base_Start_IT(&htim2);
 
@@ -127,6 +128,16 @@ int main(void)
 
 			  flag_lecturas = 2;
 		  }
+
+		  if (flag_salidas != 0){ //para demorar la escritura de las salidas cada 100 ms.
+			  flag_salidas--;
+		  }else{
+			  update_outputs();
+
+			  flag_salidas = 9;
+		  }
+
+
 
 		  flag_tick = 0;
 	  }//end if flag_tick
@@ -178,8 +189,9 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_RTC;
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_RTC|RCC_PERIPHCLK_ADC;
   PeriphClkInit.RTCClockSelection = RCC_RTCCLKSOURCE_LSI;
+  PeriphClkInit.AdcClockSelection = RCC_ADCPCLK2_DIV6;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
     Error_Handler();
