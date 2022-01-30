@@ -46,8 +46,8 @@ tableroPileta_STM32F103C8T6.bin \
 all: tableroPileta_STM32F103C8T6.elf secondary-outputs
 
 # Tool invocations
-tableroPileta_STM32F103C8T6.elf: $(OBJS) $(USER_OBJS) /home/lucho/STM32CubeIDE/domotica_STM32/tableroPileta_STM32F103C8T6/STM32F103C8TX_FLASH.ld
-	arm-none-eabi-gcc -o "tableroPileta_STM32F103C8T6.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"/home/lucho/STM32CubeIDE/domotica_STM32/tableroPileta_STM32F103C8T6/STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="tableroPileta_STM32F103C8T6.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+tableroPileta_STM32F103C8T6.elf: $(OBJS) $(USER_OBJS) /home/lucho/STM32CubeIDE/04_domotica/domotica_STM32/tableroPileta_STM32F103C8T6/STM32F103C8TX_FLASH.ld
+	arm-none-eabi-gcc -o "tableroPileta_STM32F103C8T6.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"/home/lucho/STM32CubeIDE/04_domotica/domotica_STM32/tableroPileta_STM32F103C8T6/STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="tableroPileta_STM32F103C8T6.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

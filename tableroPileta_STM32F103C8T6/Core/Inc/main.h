@@ -60,6 +60,14 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define IN_nivelAgua_Pin GPIO_PIN_2
 #define IN_nivelAgua_GPIO_Port GPIOA
+#define OUT_GLCD_SCLK_Pin GPIO_PIN_5
+#define OUT_GLCD_SCLK_GPIO_Port GPIOA
+#define OUT_GLCD_CS_Pin GPIO_PIN_6
+#define OUT_GLCD_CS_GPIO_Port GPIOA
+#define OUT_GLCD_SID_Pin GPIO_PIN_7
+#define OUT_GLCD_SID_GPIO_Port GPIOA
+#define OUT_GLCD_RST_Pin GPIO_PIN_0
+#define OUT_GLCD_RST_GPIO_Port GPIOB
 #define OUT_PL_Pin GPIO_PIN_12
 #define OUT_PL_GPIO_Port GPIOB
 #define OUT_CE1_Pin GPIO_PIN_8
