@@ -17,6 +17,7 @@
 //variables
 uint8_t flag_lecturas = 1;
 uint8_t flag_salidas = 1;
+
 //uint8_t read_teclas [SIZEOF_POS_BOTONES];
 //uint8_t last_teclas [SIZEOF_POS_BOTONES];
 T_INPUT status_teclas [SIZEOF_POS_INPUT];
@@ -152,6 +153,12 @@ void setOutput (T_POS_OUTPUT s, uint8_t val){
 	}
 
 } //end setOutput()
+
+void toggleOutput (T_POS_OUTPUT s){
+
+	write_output ^= (uint16_t)(1 << s);
+
+} //end toggleOutput()
 
 
 void update_outputs (void){

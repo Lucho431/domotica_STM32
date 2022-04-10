@@ -31,6 +31,8 @@
 #include "74HC165_SPI_lfs.h"
 #include "74_HC595_SPI_lfs.h"
 #include "IOports_lfs.h"
+#include "leds_tablero.h"
+#include "display_tablero.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -53,6 +55,8 @@
 extern uint8_t flag_lecturas;
 extern uint8_t flag_salidas;
 RTC_TimeTypeDef hora;
+
+uint8_t refresh_pantalla = 29;
 
 uint8_t flag_tick = 0;
 /* USER CODE END PV */
@@ -118,6 +122,7 @@ int main(void)
   {
 	  if (flag_tick){ //ticks every 10 ms.
 
+		  //FALTA CORREGIR... REVISAR EL PROYECTO "MAQUINA_MD".
 		  HAL_RTC_GetTime(&hrtc, &hora, RTC_FORMAT_BIN);
 
 		  update_teclas();
@@ -133,11 +138,16 @@ int main(void)
 		  if (flag_salidas != 0){ //para demorar la escritura de las salidas cada 100 ms.
 			  flag_salidas--;
 		  }else{
+			  update_leds();
 			  update_outputs();
 
 			  flag_salidas = 9;
 		  }
 
+		  if (refresh_pantalla != 0){ //refresca cada 300 ms
+			  pantallaUpdate();
+			  refresh_pantalla = 29;
+		  }
 
 
 		  flag_tick = 0;

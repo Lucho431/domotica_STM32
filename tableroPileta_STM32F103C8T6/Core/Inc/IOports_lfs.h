@@ -71,6 +71,7 @@ int8_t getNumber (void);
 //void botonEXTI_handler(uint16_t);
 
 void setOutput (T_POS_OUTPUT, uint8_t);
+void toggleOutput (T_POS_OUTPUT);
 void update_outputs (void);
 
 #endif /* INC_IOPORTS_LFS_H_ */

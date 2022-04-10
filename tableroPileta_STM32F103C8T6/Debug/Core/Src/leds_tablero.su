@@ -1,0 +1,2 @@
+leds_tablero.c:23:6:update_leds	16	static
+leds_tablero.c:66:6:set_led	16	static
