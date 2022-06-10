@@ -10,7 +10,10 @@
 
 uint8_t flag_pantalla = 0;
 
-void set_pantalla (char*);
+void set_pantalla (char* texto){
+	ST7920_SendString(0, 0, texto);
+	flag_pantalla = 1;
+}
 
 void pantallaLista(void){
 	flag_pantalla = 1;

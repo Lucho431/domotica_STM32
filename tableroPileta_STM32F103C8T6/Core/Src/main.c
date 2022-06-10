@@ -33,6 +33,7 @@
 #include "IOports_lfs.h"
 #include "leds_tablero.h"
 #include "display_tablero.h"
+#include "menu_tablero.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -55,6 +56,8 @@
 extern uint8_t flag_lecturas;
 extern uint8_t flag_salidas;
 RTC_TimeTypeDef hora;
+//RTC_TimeTypeDef aux_tiempo = {0};
+RTC_DateTypeDef aux_fecha = {0};
 
 uint8_t refresh_pantalla = 29;
 
@@ -114,6 +117,7 @@ int main(void)
   HAL_TIM_Base_Start_IT(&htim2); //ticks eery 10 ms.
 
 
+  start_menu();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -122,8 +126,10 @@ int main(void)
   {
 	  if (flag_tick){ //ticks every 10 ms.
 
-		  //FALTA CORREGIR... REVISAR EL PROYECTO "MAQUINA_MD".
+		  //segun el proyecto "MAQUINA_MD":
 		  HAL_RTC_GetTime(&hrtc, &hora, RTC_FORMAT_BIN);
+		  //HAL_RTC_GetTime(&hrtc, &aux_tiempo, RTC_FORMAT_BIN);
+		  HAL_RTC_GetDate(&hrtc, &aux_fecha, RTC_FORMAT_BIN);
 
 		  update_teclas();
 
@@ -153,7 +159,7 @@ int main(void)
 		  flag_tick = 0;
 	  }//end if flag_tick
 
-
+	  check_menu();
 
     /* USER CODE END WHILE */
 

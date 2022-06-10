@@ -44,11 +44,25 @@ T_STATUS_HIDRO status_menuHidro = LIMITE_TIEMPO_HIDRO;
 T_STATUS_LUCESEXT status_menuLucesExt = LIMITE_TIEMPO_LUCESEXT;
 
 /////////////////////////////////////////
+//         FUNCIONES PUBLICAS          //
+/////////////////////////////////////////
+void start_menu (void){
+	init_menuPrincipal();
+	menuActual = &menu[MENU_PRINCIPAL];
+}
+
+void check_menu (void){
+	menuActual->accion();
+}
+
+
+/////////////////////////////////////////
 //          INICIALIZADORES            //
 /////////////////////////////////////////
 
 void init_menuPrincipal (void){
-
+	set_pantalla("Estoy en el menu principal");
+//	menuActual = &menu[MENU_PRINCIPAL];
 }
 
 void init_llenado (void){
@@ -91,6 +105,19 @@ void init_config (void){
 
 void acc_menuPrincipal (void){
 
+	if (getStatBoton(IN_napa)==FALL){
+		menuActual = &menu[MENU_LLENADO];
+		menuActual->menuAnterior = &menu[MENU_PRINCIPAL];
+		menuActual->inicia_menu();
+		return;
+	}
+
+	if (getStatBoton(IN_jet)==FALL){
+		menuActual = &menu[MENU_HIDRO];
+		menuActual->menuAnterior = &menu[MENU_PRINCIPAL];
+		menuActual->inicia_menu();
+		return;
+	}
 }
 
 void acc_llenado (void){
@@ -115,6 +142,9 @@ void acc_llenado (void){
 
 			if (getStatBoton(IN_AST) == FALL) { //volver
 				//vuelve al menu principal
+				menuActual = &menu[MENU_PRINCIPAL];
+				menuActual->inicia_menu();
+				break;
 			}
 
 			if (getStatBoton(IN_HASH) == FALL) { //CONFIRMO
@@ -124,6 +154,7 @@ void acc_llenado (void){
 			}
 		break;
 		case COMPRUEBE_SENSOR:
+
 			if (getStatBoton(IN_HASH) == FALL) { //CONFIRMO
 				set_pantalla("llenando...");
 				status_menuLlenado = LLENANDO;
@@ -148,10 +179,16 @@ void acc_llenado (void){
 		case PILETA_LLENA:
 			if (getStatBoton(IN_HASH) == FALL) { //CONFIRMO
 				//vuelve al menu principal
+				menuActual = &menu[MENU_PRINCIPAL];
+				menuActual->inicia_menu();
+				break;
 			}
 
 			if (getStatBoton(IN_AST) == FALL) { //volver
 				//vuelve al menu principal
+				menuActual = &menu[MENU_PRINCIPAL];
+				menuActual->inicia_menu();
+				break;
 			}
 
 		default:
@@ -165,6 +202,8 @@ void acc_skimmer (void){
 		case COMPRUEBE_BOMBA:
 			if (getStatBoton(IN_AST) == FALL) {
 				//vuelve al menu principal
+				menuActual = &menu[MENU_PRINCIPAL];
+				menuActual->inicia_menu();
 			}
 
 			if (getStatBoton(IN_HASH) == FALL) {
@@ -272,6 +311,9 @@ void acc_hidro (void){
 		case LIMITE_TIEMPO_HIDRO:
 			if (getStatBoton(IN_AST) == FALL) {
 				//vuelve al menu principal
+				menuActual = &menu[MENU_PRINCIPAL];
+				menuActual->inicia_menu();
+				break;
 			}
 
 			if (getStatBoton(IN_HASH) == FALL) {
@@ -291,6 +333,8 @@ void acc_lucesExt (void){ //luces Amarillas
 			case LIMITE_TIEMPO_LUCESEXT:
 				if (getStatBoton(IN_AST) == FALL) {
 					//vuelve al menu principal
+					menuActual = &menu[MENU_PRINCIPAL];
+					menuActual->inicia_menu();
 				}
 
 				if (getStatBoton(IN_HASH) == FALL) {

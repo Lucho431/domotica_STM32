@@ -59,4 +59,9 @@ typedef enum{
 	ELIJE_TIEMPO_LUCESEXT,
 } T_STATUS_LUCESEXT; //LUCES AMARILLAS
 
+
+//funciones publicas
+void start_menu (void);
+void check_menu (void);
+
 #endif /* INC_MENU_TABLERO_H_ */
