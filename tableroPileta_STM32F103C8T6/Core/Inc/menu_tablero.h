@@ -63,5 +63,6 @@ typedef enum{
 //funciones publicas
 void start_menu (void);
 void check_menu (void);
+void check_pulsadores (void);
 
 #endif /* INC_MENU_TABLERO_H_ */

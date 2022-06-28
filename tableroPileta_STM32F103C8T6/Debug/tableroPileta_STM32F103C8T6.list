@@ -27,23 +27,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 00000029  00000000  00000000  00020084  2**0
                   CONTENTS, READONLY
- 12 .debug_info   00012138  00000000  00000000  000200ad  2**0
+ 12 .debug_info   00012149  00000000  00000000  000200ad  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_abbrev 000034c9  00000000  00000000  000321e5  2**0
+ 13 .debug_abbrev 000034c9  00000000  00000000  000321f6  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_aranges 00001360  00000000  00000000  000356b0  2**3
+ 14 .debug_aranges 00001368  00000000  00000000  000356c0  2**3
                   CONTENTS, READONLY, DEBUGGING
- 15 .debug_ranges 00001180  00000000  00000000  00036a10  2**3
+ 15 .debug_ranges 00001188  00000000  00000000  00036a28  2**3
                   CONTENTS, READONLY, DEBUGGING
- 16 .debug_macro  0001686c  00000000  00000000  00037b90  2**0
+ 16 .debug_macro  0001686c  00000000  00000000  00037bb0  2**0
                   CONTENTS, READONLY, DEBUGGING
- 17 .debug_line   0001134b  00000000  00000000  0004e3fc  2**0
+ 17 .debug_line   00011363  00000000  00000000  0004e41c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 18 .debug_str    00077688  00000000  00000000  0005f747  2**0
+ 18 .debug_str    00077699  00000000  00000000  0005f77f  2**0
                   CONTENTS, READONLY, DEBUGGING
- 19 .comment      0000007b  00000000  00000000  000d6dcf  2**0
+ 19 .comment      0000007b  00000000  00000000  000d6e18  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00004ca4  00000000  00000000  000d6e4c  2**2
+ 20 .debug_frame  00004cc0  00000000  00000000  000d6e94  2**2
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -2442,6 +2442,7 @@ void acc_menuPrincipal (void){
  8000f56:	e011      	b.n	8000f7c <acc_menuPrincipal+0x4c>
 	}
 
+	//RE VER: debería ejecutar el programa y no configurarlo...
 	if (getStatBoton(IN_jet)==FALL){
  8000f58:	2014      	movs	r0, #20
  8000f5a:	f7ff fabd 	bl	80004d8 <getStatBoton>

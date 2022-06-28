@@ -56,6 +56,24 @@ void check_menu (void){
 	menuActual->accion();
 }
 
+void check_pulsadores (void){
+
+	if (getStatBoton(IN_jet) == FALL){
+		//arranca el programa del hidro
+	}
+
+	if (getStatBoton(IN_napa) == FALL){
+		menuAux = menuActual;
+		menuActual = &menu[MENU_LLENADO];
+		menuActual->menuAnterior = menuAux;
+		menuActual->inicia_menu();
+	}
+
+	if (getStatBoton(IN_tomas) == FALL){
+		//prende o apaga los tomas
+	}
+
+}
 
 /////////////////////////////////////////
 //          INICIALIZADORES            //
@@ -113,6 +131,7 @@ void acc_menuPrincipal (void){
 		return;
 	}
 
+	//RE VER: debería ejecutar el programa y no configurarlo...
 	if (getStatBoton(IN_jet)==FALL){
 		menuActual = &menu[MENU_HIDRO];
 		menuActual->menuAnterior = &menu[MENU_PRINCIPAL];
