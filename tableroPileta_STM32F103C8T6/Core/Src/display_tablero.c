@@ -7,12 +7,18 @@
 
 #include "display_tablero.h"
 #include "ST7920_SERIAL.h"
+#include "delay.h"
 
 uint8_t flag_pantalla = 0;
 
+void init_pantalla (void){
+	delay_init();
+	ST7920_Init();
+}
+
 void set_pantalla (char* texto){
 	ST7920_SendString(0, 0, texto);
-	flag_pantalla = 1;
+	//flag_pantalla = 1;
 }
 
 void pantallaLista(void){

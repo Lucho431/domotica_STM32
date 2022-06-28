@@ -47,6 +47,7 @@ T_STATUS_LUCESEXT status_menuLucesExt = LIMITE_TIEMPO_LUCESEXT;
 //         FUNCIONES PUBLICAS          //
 /////////////////////////////////////////
 void start_menu (void){
+	init_pantalla();
 	init_menuPrincipal();
 	menuActual = &menu[MENU_PRINCIPAL];
 }
@@ -69,10 +70,10 @@ void init_llenado (void){
 
 	switch (status_menuLlenado) {
 		case PREGUNTA_SENSOR:
-			set_pantalla("¿Sensor conectado?");
+			set_pantalla("Sensor conectado?");
 		break;
 		default:
-			set_pantalla("Llenando. ¿terminar?");
+			set_pantalla("Llenando. terminar?");
 			//status_menuLlenado = 90;
 		break;
 	} //end switch status_menuTablero
