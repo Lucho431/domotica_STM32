@@ -33,7 +33,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Core/Inc/74HC165_SPI_lfs.h ../Core/Inc/74_HC595_SPI_lfs.h \
  ../Core/Inc/IOports_lfs.h ../Core/Inc/leds_tablero.h \
  ../Core/Inc/IOports_lfs.h ../Core/Inc/display_tablero.h \
- ../Core/Inc/menu_tablero.h
+ ../Core/Inc/menu_tablero.h ../Core/Inc/funciones_tablero.h
 
 ../Core/Inc/main.h:
 
@@ -122,3 +122,5 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/display_tablero.h:
 
 ../Core/Inc/menu_tablero.h:
+
+../Core/Inc/funciones_tablero.h:

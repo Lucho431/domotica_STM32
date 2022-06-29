@@ -5,6 +5,7 @@
 "Core/Src/adc.o"
 "Core/Src/delay.o"
 "Core/Src/display_tablero.o"
+"Core/Src/funciones_tablero.o"
 "Core/Src/gpio.o"
 "Core/Src/leds_tablero.o"
 "Core/Src/main.o"

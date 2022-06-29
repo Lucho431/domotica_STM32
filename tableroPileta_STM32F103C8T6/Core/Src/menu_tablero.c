@@ -8,9 +8,15 @@
 #include "menu_tablero.h"
 #include "IOports_lfs.h"
 #include "display_tablero.h"
+#include "funciones_tablero.h"
 
+
+//variables menu
 T_MENU* menuActual;
 T_MENU* menuAux;
+//variables tomas
+uint8_t flag_tomas = 0;
+
 
 void acc_menuPrincipal (void);
 void acc_llenado (void);
@@ -70,8 +76,16 @@ void check_pulsadores (void){
 	}
 
 	if (getStatBoton(IN_tomas) == FALL){
-		//prende o apaga los tomas
-	}
+		if (!flag_tomas){
+			setOutput(OUT_rele_tomas, 1); //logica positiva
+			setOutput(OUT_led_tomas, 0); //logica negativa
+			flag_tomas = 0;
+		}else{
+			setOutput(OUT_rele_tomas, 0); //logica positiva
+			setOutput(OUT_led_tomas, 1); //logica negativa
+			flag_tomas = 1;
+		}
+	} //end if IN_tomas
 
 }
 
@@ -179,6 +193,7 @@ void acc_llenado (void){
 				set_pantalla("llenando...");
 				status_menuLlenado = LLENANDO;
 				//funcion de llenado de pileta (biblio de funciones automaticas)
+				setProg_llenado();
 				break;
 			}
 

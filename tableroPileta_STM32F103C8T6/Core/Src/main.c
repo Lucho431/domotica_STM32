@@ -34,6 +34,7 @@
 #include "leds_tablero.h"
 #include "display_tablero.h"
 #include "menu_tablero.h"
+#include "funciones_tablero.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -155,6 +156,7 @@ int main(void)
 			  refresh_pantalla = 29;
 		  }
 
+		  check_pulsadores();
 
 		  flag_tick = 0;
 	  }//end if flag_tick
