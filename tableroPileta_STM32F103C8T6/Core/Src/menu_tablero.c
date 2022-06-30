@@ -9,6 +9,7 @@
 #include "IOports_lfs.h"
 #include "display_tablero.h"
 #include "funciones_tablero.h"
+#include "leds_tablero.h"
 
 
 //variables menu
@@ -65,10 +66,17 @@ void check_menu (void){
 void check_pulsadores (void){
 
 	if (getStatBoton(IN_jet) == FALL){
-		//arranca el programa del hidro
-	}
+		if (runProg_hidro(PROG_CHECK) == PROG_BUSY){
+			runProg_hidro(PROG_STOP);
+		}else if(runProg_hidro(PROG_CHECK) == PROG_IDLE){
+			runProg_hidro(PROG_RUN);
+		}
+	} //end if getStatBoton IN_jet
 
 	if (getStatBoton(IN_napa) == FALL){
+
+
+
 		menuAux = menuActual;
 		menuActual = &menu[MENU_LLENADO];
 		menuActual->menuAnterior = menuAux;
@@ -78,11 +86,11 @@ void check_pulsadores (void){
 	if (getStatBoton(IN_tomas) == FALL){
 		if (!flag_tomas){
 			setOutput(OUT_rele_tomas, 1); //logica positiva
-			setOutput(OUT_led_tomas, 0); //logica negativa
+			set_led(OUT_led_tomas, PRENDIDO);
 			flag_tomas = 0;
 		}else{
 			setOutput(OUT_rele_tomas, 0); //logica positiva
-			setOutput(OUT_led_tomas, 1); //logica negativa
+			set_led(OUT_led_tomas, APAGADO);
 			flag_tomas = 1;
 		}
 	} //end if IN_tomas
@@ -206,7 +214,7 @@ void acc_llenado (void){
 		break;
 		case LLENANDO:
 
-			if (!HAL_GPIO_ReadPin(IN_nivelAgua_GPIO_Port, IN_nivelAgua_Pin)) { //LOGICA NEGATIVA
+			if (runProg_llenado(PROG_CHECK) == PROG_FINISHED ) { //LOGICA NEGATIVA
 				set_pantalla("pileta llena.");
 				status_menuLlenado = PILETA_LLENA;
 				break;

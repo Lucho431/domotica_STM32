@@ -51,13 +51,13 @@ void update_leds (void){ //LOGICA NEGATIVA
 	if (demora_lenta != 0){
 		demora_lenta--;
 	}else{
-		demora_lenta = 49;
+		demora_lenta = 5; // por 100 ms.
 	}
 
 	if (demora_rapida != 0){
 		demora_rapida--;
 	}else{
-		demora_rapida = 19;
+		demora_rapida = 1; // por 100 ms.
 	}
 
 } //end update_leds()

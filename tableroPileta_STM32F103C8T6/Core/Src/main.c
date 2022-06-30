@@ -159,6 +159,10 @@ int main(void)
 	  }//end if flag_tick
 
 	  check_menu();
+	  runProg_hidro(PROG_CHECK);
+	  runProg_llenado(PROG_CHECK);
+	  runProg_luz(PROG_CHECK);
+	  runProg_skimmer(PROG_CHECK);
 
     /* USER CODE END WHILE */
 

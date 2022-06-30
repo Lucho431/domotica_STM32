@@ -19,6 +19,7 @@ RTC_DateTypeDef auxFecha;
 RTC_TimeTypeDef auxHora;
 
 //variables hidro
+T_PROG_OUTPUT status_progHidro;
 int16_t tiempoHidroAux = 0;
 int16_t tiempoHidro = 0;
 uint8_t statusTiempoHidro = 0;
@@ -116,7 +117,17 @@ T_PROG_OUTPUT setProg_hidro (T_PROG_CMD cmd){
 }
 
 T_PROG_OUTPUT setProg_llenado (T_PROG_CMD cmd){
-	__NOP();
+
+	if (cmd != PROG_RUN) return PROG_ERROR;
+
+	if (!HAL_GPIO_ReadPin(IN_nivelAgua_GPIO_Port, IN_nivelAgua_Pin)) { //LOGICA NEGATIVA
+		return PROG_ERROR;
+	}
+
+	setOutput(OUT_rele_napa, 1); //logica positiva
+	//falta manejar los led
+
+	return PROG_FINISHED;
 }
 
 T_PROG_OUTPUT setProg_skimmer (T_PROG_CMD cmd){
@@ -152,8 +163,15 @@ T_PROG_OUTPUT runProg_hidro (T_PROG_CMD cmd){
 				}
 			} //end if hora_hidro...
 
+			status_progHidro = PROG_BUSY;
+
 		break;
 		case PROG_CHECK:
+
+			if (status_progHidro == PROG_IDLE){
+				//return PROG_IDLE;
+				break;
+			}
 
 			auxFecha = get_fecha();
 			auxHora = get_hora();
@@ -161,37 +179,50 @@ T_PROG_OUTPUT runProg_hidro (T_PROG_CMD cmd){
 			if (fecha_hidro.Date < auxFecha.Date){
 				setOutput(OUT_rele_jet, 0); //logica positiva
 				//falta manejar el led
-				break;
+
+//				return PROG_FINISHED;
+				status_progHidro = PROG_IDLE;
 			}
 
 			if (hora_hidro.Hours < auxHora.Hours){
 				setOutput(OUT_rele_jet, 0); //logica positiva
 				//falta manejar el led
-				break;
+
+//				return PROG_FINISHED;
+				status_progHidro = PROG_IDLE;
 			}
 
 			if (hora_hidro.Minutes < auxHora.Minutes){
 				setOutput(OUT_rele_jet, 0); //logica positiva
 				//falta manejar el led
-				break;
+
+//				return PROG_FINISHED;
+				status_progHidro = PROG_IDLE;
 			}
 		break;
 		case PROG_STOP:
 			setOutput(OUT_rele_jet, 0); //logica positiva
 			//falta manejar el led
+
+//			return PROG_FINISHED;
+			status_progHidro = PROG_IDLE;
 		break;
 
 		default:
 		break;
 	} //end switch progCmd_hidro
 
-	get_hora();
-
-	return 0;
+	return status_progHidro;
 } //end runProg_hidro()
 
 T_PROG_OUTPUT runProg_llenado (T_PROG_CMD cmd){
-	__NOP();
+
+	if (!HAL_GPIO_ReadPin(IN_nivelAgua_GPIO_Port, IN_nivelAgua_Pin)) { //LOGICA NEGATIVA
+		setOutput(OUT_rele_napa, 0); //logica positiva
+		//falta manejar los led
+		return PROG_FINISHED;
+	}
+	return PROG_BUSY;
 }
 
 T_PROG_OUTPUT runProg_skimmer (T_PROG_CMD cmd){

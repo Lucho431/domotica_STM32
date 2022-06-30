@@ -18,10 +18,13 @@ typedef enum{
 }T_PROG_CMD;
 
 typedef enum{
+	PROG_ERROR,
 	PROG_IDLE,
 	PROG_BUSY,
 	PROG_FINISHED,
 }T_PROG_OUTPUT;
+
+
 
 
 T_PROG_OUTPUT setProg_hidro (T_PROG_CMD);
