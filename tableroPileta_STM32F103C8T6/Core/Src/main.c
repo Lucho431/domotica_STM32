@@ -127,10 +127,7 @@ int main(void)
   {
 	  if (flag_tick){ //ticks every 10 ms.
 
-		  //segun el proyecto "MAQUINA_MD":
-		  HAL_RTC_GetTime(&hrtc, &hora, RTC_FORMAT_BIN);
-		  //HAL_RTC_GetTime(&hrtc, &aux_tiempo, RTC_FORMAT_BIN);
-		  HAL_RTC_GetDate(&hrtc, &aux_fecha, RTC_FORMAT_BIN);
+		  update_horaFecha();
 
 		  update_teclas();
 

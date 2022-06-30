@@ -10,8 +10,8 @@ menu_tablero.c:126:6:init_lucesLed	4	static
 menu_tablero.c:130:6:init_config	4	static
 menu_tablero.c:139:6:acc_menuPrincipal	8	static
 menu_tablero.c:157:6:acc_llenado	8	static
-menu_tablero.c:234:6:acc_skimmer	8	static
-menu_tablero.c:342:6:acc_hidro	8	static
-menu_tablero.c:365:6:acc_lucesExt	8	static
-menu_tablero.c:385:6:acc_lucesLed	4	static
-menu_tablero.c:389:6:acc_config	4	static
+menu_tablero.c:235:6:acc_skimmer	8	static
+menu_tablero.c:343:6:acc_hidro	8	static
+menu_tablero.c:368:6:acc_lucesExt	8	static
+menu_tablero.c:389:6:acc_lucesLed	4	static
+menu_tablero.c:393:6:acc_config	4	static

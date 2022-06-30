@@ -193,7 +193,7 @@ void acc_llenado (void){
 				set_pantalla("llenando...");
 				status_menuLlenado = LLENANDO;
 				//funcion de llenado de pileta (biblio de funciones automaticas)
-				setProg_llenado();
+				setProg_llenado(PROG_RUN);
 				break;
 			}
 
@@ -344,6 +344,7 @@ void acc_hidro (void){
 
 	switch (status_menuHidro) {
 		case LIMITE_TIEMPO_HIDRO:
+
 			if (getStatBoton(IN_AST) == FALL) {
 				//vuelve al menu principal
 				menuActual = &menu[MENU_PRINCIPAL];
@@ -358,6 +359,7 @@ void acc_hidro (void){
 		break;
 		case ELIJE_TIEMPO_HIDRO:
 			//funcion de seteo de timepo de hidro
+			setProg_hidro(PROG_RUN);
 		break;
 	} //end switch status_menuHidro
 
@@ -373,12 +375,13 @@ void acc_lucesExt (void){ //luces Amarillas
 				}
 
 				if (getStatBoton(IN_HASH) == FALL) {
-					status_menuHidro = ELIJE_TIEMPO_LUCESEXT;
+					status_menuLucesExt = ELIJE_TIEMPO_LUCESEXT;
 					break;
 				}
 			break;
 			case ELIJE_TIEMPO_LUCESEXT:
 				//funcion de seteo de timepo de hidro
+				setProg_luz(PROG_RUN);
 			break;
 		} //end switch status_menuLucesExt
 } //end acc_lucesExt()

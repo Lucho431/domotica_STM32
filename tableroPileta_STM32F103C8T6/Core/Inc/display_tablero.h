@@ -8,6 +8,8 @@
 #ifndef INC_DISPLAY_TABLERO_H_
 #define INC_DISPLAY_TABLERO_H_
 
+#include "stdio.h"
+
 void init_pantalla (void);
 void set_pantalla (char* texto);
 void pantallaLista(void);
