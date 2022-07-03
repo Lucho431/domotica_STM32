@@ -15,6 +15,9 @@ typedef enum{
 	PROG_CHECK,
 	PROG_RUN,
 	PROG_STOP,
+	PROG_SET1,
+	PROG_SET2,
+	PROG_SET3,
 }T_PROG_CMD;
 
 typedef enum{

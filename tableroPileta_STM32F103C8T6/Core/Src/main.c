@@ -35,6 +35,7 @@
 #include "display_tablero.h"
 #include "menu_tablero.h"
 #include "funciones_tablero.h"
+#include "hora_tablero.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -125,11 +126,13 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  update_teclas();
+
 	  if (flag_tick){ //ticks every 10 ms.
 
 		  update_horaFecha();
 
-		  update_teclas();
+//		  update_teclas();
 
 		  if (flag_lecturas != 0){ //para demorar las lecturas de teclas cada 30 ms.
 			  flag_lecturas--;

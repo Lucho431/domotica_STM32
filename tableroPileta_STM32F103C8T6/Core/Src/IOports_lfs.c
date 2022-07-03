@@ -68,7 +68,7 @@ void turnONFila (uint8_t filaNum){
 
 void lecturaTeclas (void){
 
-	last_input = read_input;
+//	last_input = read_input;
 
 	//pulsadores:
 	spi_74HC165_receiveBotones (&read_teclas, 1);
@@ -95,7 +95,7 @@ void update_teclas(void){ //ESTADO DE LAS TECLAS CON LOGICA NEGATIVA
 	fall_input = last_input & ~read_input;
 	rise_input = ~last_input & read_input;
 
-
+	last_input = read_input;
 
 } //end teclas
 
