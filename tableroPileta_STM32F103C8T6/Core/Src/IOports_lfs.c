@@ -80,11 +80,18 @@ void lecturaTeclas (void){
 		spi_74HC165_receiveTeclado(&read_teclado[i], 1);
 	}//end for i
 
-	read_input = (uint32_t) (read_teclas |
-							(read_teclado[0] << 6) |
-							(read_teclado[1] << 10) |
-							(read_teclado[2] << 14) |
-							(read_teclado[3] << 18));
+//	read_input = (uint32_t) (read_teclas |
+//							(read_teclado[0] << 6) |
+//							(read_teclado[1] << 10) |
+//							(read_teclado[2] << 14) |
+//							(read_teclado[3] << 18));
+
+	read_input = (uint32_t) ( (read_teclado[0] & 0b1111) |
+							( (read_teclado[1] & 0b1111) << 4) |
+							( (read_teclado[2] & 0b1111) << 8) |
+							( (read_teclado[3] & 0b1111) << 12) |
+							(read_teclas << 16) );
+
 
 } //end lecturaTeclas()
 

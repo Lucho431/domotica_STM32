@@ -128,6 +128,8 @@ int main(void)
   {
 	  update_teclas();
 
+	  uint8_t pruebaNumero = getNumber();
+
 	  if (flag_tick){ //ticks every 10 ms.
 
 		  update_horaFecha();
