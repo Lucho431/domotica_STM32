@@ -53,6 +53,22 @@ void spi_74HC165_receiveBotones (uint8_t* pdata, uint16_t sizeData){
 }
 
 
+//void spi_74HC165_receiveTeclado (uint8_t* pdata, uint16_t sizeData){
+//
+//	//carga paralela
+//	HAL_GPIO_WritePin(portPL, pinPL, 0);
+//	HAL_GPIO_WritePin(portPL, pinPL, 1);
+//
+//	//clock enable
+//	HAL_GPIO_WritePin(portCE2, pinCE2, 0);
+//
+//	//SPI
+//	HAL_SPI_Receive(spi_handler, pdata, sizeData, 100);
+//
+//	//clock disable
+//	HAL_GPIO_WritePin(portCE2, pinCE2, 1);
+//}
+
 void spi_74HC165_receiveTeclado (uint8_t* pdata, uint16_t sizeData){
 
 	//carga paralela
@@ -60,11 +76,15 @@ void spi_74HC165_receiveTeclado (uint8_t* pdata, uint16_t sizeData){
 	HAL_GPIO_WritePin(portPL, pinPL, 1);
 
 	//clock enable
-	HAL_GPIO_WritePin(portCE2, pinCE2, 0);
+	HAL_GPIO_WritePin(portCE1, pinCE1, 0);
+
+	uint8_t auxData[2];
 
 	//SPI
-	HAL_SPI_Receive(spi_handler, pdata, sizeData, 100);
+	HAL_SPI_Receive(spi_handler, auxData, 2, 100);
 
 	//clock disable
-	HAL_GPIO_WritePin(portCE2, pinCE2, 1);
+	HAL_GPIO_WritePin(portCE1, pinCE1, 1);
+
+	*pdata = auxData[1];
 }

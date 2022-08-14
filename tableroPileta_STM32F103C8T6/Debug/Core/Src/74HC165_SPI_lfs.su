@@ -1,3 +1,3 @@
 74HC165_SPI_lfs.c:24:6:spi_74HC165_init	24	static
 74HC165_SPI_lfs.c:39:6:spi_74HC165_receiveBotones	16	static
-74HC165_SPI_lfs.c:56:6:spi_74HC165_receiveTeclado	16	static
+74HC165_SPI_lfs.c:72:6:spi_74HC165_receiveTeclado	24	static
