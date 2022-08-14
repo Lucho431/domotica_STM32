@@ -49,11 +49,11 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, OUT_GLCD_SCLK_Pin|OUT_GLCD_CS_Pin|OUT_GLCD_SID_Pin|OUT_CE1_Pin
-                          |OUT_CE2_Pin|OUT_ST_Pin|OUT_fila3_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, OUT_GLCD_SCLK_Pin|OUT_GLCD_CS_Pin|OUT_GLCD_SID_Pin|OUT_CE_Pin
+                          |OUT_PL_Pin|OUT_fila3_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, OUT_GLCD_RST_Pin|OUT_PL_Pin|OUT_fila2_Pin|OUT_fila1_Pin
+  HAL_GPIO_WritePin(GPIOB, OUT_GLCD_RST_Pin|OUT_ST_Pin|OUT_fila2_Pin|OUT_fila1_Pin
                           |OUT_fila0_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : PtPin */
@@ -63,9 +63,9 @@ void MX_GPIO_Init(void)
   HAL_GPIO_Init(IN_nivelAgua_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PAPin PAPin PAPin PAPin
-                           PAPin PAPin PAPin */
-  GPIO_InitStruct.Pin = OUT_GLCD_SCLK_Pin|OUT_GLCD_CS_Pin|OUT_GLCD_SID_Pin|OUT_CE1_Pin
-                          |OUT_CE2_Pin|OUT_ST_Pin|OUT_fila3_Pin;
+                           PAPin PAPin */
+  GPIO_InitStruct.Pin = OUT_GLCD_SCLK_Pin|OUT_GLCD_CS_Pin|OUT_GLCD_SID_Pin|OUT_CE_Pin
+                          |OUT_PL_Pin|OUT_fila3_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -73,7 +73,7 @@ void MX_GPIO_Init(void)
 
   /*Configure GPIO pins : PBPin PBPin PBPin PBPin
                            PBPin */
-  GPIO_InitStruct.Pin = OUT_GLCD_RST_Pin|OUT_PL_Pin|OUT_fila2_Pin|OUT_fila1_Pin
+  GPIO_InitStruct.Pin = OUT_GLCD_RST_Pin|OUT_ST_Pin|OUT_fila2_Pin|OUT_fila1_Pin
                           |OUT_fila0_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;

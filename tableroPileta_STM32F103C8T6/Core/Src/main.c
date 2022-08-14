@@ -113,7 +113,7 @@ int main(void)
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
 
-  spi_74HC165_init(&hspi2, OUT_PL_GPIO_Port, OUT_PL_Pin, OUT_CE1_GPIO_Port, OUT_CE1_Pin, OUT_CE2_GPIO_Port, OUT_CE2_Pin);
+  spi_74HC165_init(&hspi2, OUT_PL_GPIO_Port, OUT_PL_Pin, OUT_CE_GPIO_Port, OUT_CE_Pin);
   spi_74HC595_init(&hspi2, OUT_ST_GPIO_Port, OUT_ST_Pin);
 
   HAL_TIM_Base_Start_IT(&htim2); //ticks eery 10 ms.
