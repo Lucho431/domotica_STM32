@@ -35,31 +35,31 @@ void turnONFila (uint8_t filaNum){
 	switch (filaNum){
 		case 0:
 			//pongo en 0 la fila 0; resto en 1 (LOGICA NEGATIVA).
-			HAL_GPIO_WritePin(OUT_fila0_GPIO_Port, OUT_fila0_Pin, 0);
+			HAL_GPIO_WritePin(OUT_fila0_GPIO_Port, OUT_fila0_Pin, 1);
 			HAL_GPIO_WritePin(OUT_fila1_GPIO_Port, OUT_fila1_Pin, 1);
 			HAL_GPIO_WritePin(OUT_fila2_GPIO_Port, OUT_fila2_Pin, 1);
-			HAL_GPIO_WritePin(OUT_fila3_GPIO_Port, OUT_fila3_Pin, 1);
+			HAL_GPIO_WritePin(OUT_fila3_GPIO_Port, OUT_fila3_Pin, 0);
 		break;
 		case 1:
 			//pongo en 0 la fila 1; resto en 1 (LOGICA NEGATIVA).
-			HAL_GPIO_WritePin(OUT_fila0_GPIO_Port, OUT_fila0_Pin, 1);
-			HAL_GPIO_WritePin(OUT_fila1_GPIO_Port, OUT_fila1_Pin, 0);
-			HAL_GPIO_WritePin(OUT_fila2_GPIO_Port, OUT_fila2_Pin, 1);
-			HAL_GPIO_WritePin(OUT_fila3_GPIO_Port, OUT_fila3_Pin, 1);
-		break;
-		case 2:
-			//pongo en 0 la fila 2; resto en 1 (LOGICA NEGATIVA).
 			HAL_GPIO_WritePin(OUT_fila0_GPIO_Port, OUT_fila0_Pin, 1);
 			HAL_GPIO_WritePin(OUT_fila1_GPIO_Port, OUT_fila1_Pin, 1);
 			HAL_GPIO_WritePin(OUT_fila2_GPIO_Port, OUT_fila2_Pin, 0);
 			HAL_GPIO_WritePin(OUT_fila3_GPIO_Port, OUT_fila3_Pin, 1);
 		break;
+		case 2:
+			//pongo en 0 la fila 2; resto en 1 (LOGICA NEGATIVA).
+			HAL_GPIO_WritePin(OUT_fila0_GPIO_Port, OUT_fila0_Pin, 1);
+			HAL_GPIO_WritePin(OUT_fila1_GPIO_Port, OUT_fila1_Pin, 0);
+			HAL_GPIO_WritePin(OUT_fila2_GPIO_Port, OUT_fila2_Pin, 1);
+			HAL_GPIO_WritePin(OUT_fila3_GPIO_Port, OUT_fila3_Pin, 1);
+		break;
 		case 3:
 			//pongo en 0 la fila 3; resto en 1 (LOGICA NEGATIVA).
-			HAL_GPIO_WritePin(OUT_fila0_GPIO_Port, OUT_fila0_Pin, 1);
+			HAL_GPIO_WritePin(OUT_fila0_GPIO_Port, OUT_fila0_Pin, 0);
 			HAL_GPIO_WritePin(OUT_fila1_GPIO_Port, OUT_fila1_Pin, 1);
 			HAL_GPIO_WritePin(OUT_fila2_GPIO_Port, OUT_fila2_Pin, 1);
-			HAL_GPIO_WritePin(OUT_fila3_GPIO_Port, OUT_fila3_Pin, 0);
+			HAL_GPIO_WritePin(OUT_fila3_GPIO_Port, OUT_fila3_Pin, 1);
 		default:
 		break;
 	}//end witch

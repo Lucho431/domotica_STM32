@@ -62,7 +62,7 @@ T_PROG_OUTPUT setProg_hidro (T_PROG_CMD cmd){
 			if (newNumber > 0) {
 				tiempoHidroAux = newNumber;
 				sprintf(texto, "%d min.", tiempoHidroAux);
-				set_pantalla(texto);
+				setTexto_pantalla(texto);
 				statusTiempoHidro = 1;
 			}
 		break;
@@ -70,7 +70,7 @@ T_PROG_OUTPUT setProg_hidro (T_PROG_CMD cmd){
 			if (getStatBoton(IN_AST) == FALL) {
 				tiempoHidroAux = 0;
 				sprintf(texto, "%d min.", tiempoHidroAux);
-				set_pantalla(texto);
+				setTexto_pantalla(texto);
 				statusTiempoHidro = 0;
 				break;
 			}
@@ -84,7 +84,7 @@ T_PROG_OUTPUT setProg_hidro (T_PROG_CMD cmd){
 				tiempoHidroAux *= 10;
 				tiempoHidroAux += newNumber;
 				sprintf(texto, "%d min.", tiempoHidroAux);
-				set_pantalla(texto);
+				setTexto_pantalla(texto);
 				statusTiempoHidro = 2;
 				break;
 			}
@@ -94,7 +94,7 @@ T_PROG_OUTPUT setProg_hidro (T_PROG_CMD cmd){
 			if (getStatBoton(IN_AST) == FALL) {
 				tiempoHidroAux /= 10;
 				sprintf(texto, "%d min.", tiempoHidroAux);
-				set_pantalla(texto);
+				setTexto_pantalla(texto);
 				if (statusTiempoHidro < 10) {
 					statusTiempoHidro = 1;
 				}
@@ -111,7 +111,7 @@ T_PROG_OUTPUT setProg_hidro (T_PROG_CMD cmd){
 					tiempoHidroAux *= 10;
 					tiempoHidroAux += newNumber;
 					sprintf(texto, "%d min.", tiempoHidroAux);
-					set_pantalla(texto);
+					setTexto_pantalla(texto);
 					break;
 				}
 			}
@@ -161,7 +161,7 @@ T_PROG_OUTPUT setProg_llenado (T_PROG_CMD cmd){
 			if (newNumber > 0) {
 				tiempoLlenadoAux = newNumber;
 				sprintf(texto, "%d min.", tiempoLlenadoAux);
-				set_pantalla(texto);
+				setTexto_pantalla(texto);
 				statusTiempoLlenado = 1;
 			}
 		break;
@@ -169,7 +169,7 @@ T_PROG_OUTPUT setProg_llenado (T_PROG_CMD cmd){
 			if (getStatBoton(IN_AST) == FALL) {
 				tiempoLlenadoAux = 0;
 				sprintf(texto, "%d min.", tiempoLlenadoAux);
-				set_pantalla(texto);
+				setTexto_pantalla(texto);
 				statusTiempoLlenado = 0;
 				break;
 			}
@@ -183,7 +183,7 @@ T_PROG_OUTPUT setProg_llenado (T_PROG_CMD cmd){
 				tiempoLlenadoAux *= 10;
 				tiempoLlenadoAux += newNumber;
 				sprintf(texto, "%d min.", tiempoLlenadoAux);
-				set_pantalla(texto);
+				setTexto_pantalla(texto);
 				statusTiempoLlenado = 2;
 				break;
 			}
@@ -193,7 +193,7 @@ T_PROG_OUTPUT setProg_llenado (T_PROG_CMD cmd){
 			if (getStatBoton(IN_AST) == FALL) {
 				tiempoLlenadoAux /= 10;
 				sprintf(texto, "%d min.", tiempoLlenadoAux);
-				set_pantalla(texto);
+				setTexto_pantalla(texto);
 				if (statusTiempoLlenado < 10) {
 					statusTiempoLlenado = 1;
 				}
@@ -212,7 +212,7 @@ T_PROG_OUTPUT setProg_llenado (T_PROG_CMD cmd){
 							tiempoLlenadoAux *= 10;
 							tiempoLlenadoAux += newNumber;
 							sprintf(texto, "%d min.", tiempoLlenadoAux);
-							set_pantalla(texto);
+							setTexto_pantalla(texto);
 							break;
 						} //end if newNumber...
 					} //end iftiempoLlenadoAux...
@@ -223,7 +223,7 @@ T_PROG_OUTPUT setProg_llenado (T_PROG_CMD cmd){
 							tiempoLlenadoAux *= 10;
 							tiempoLlenadoAux += newNumber;
 							sprintf(texto, "%d min.", tiempoLlenadoAux);
-							set_pantalla(texto);
+							setTexto_pantalla(texto);
 							break;
 						} //end if newNumber...
 					} //end iftiempoLlenadoAux...

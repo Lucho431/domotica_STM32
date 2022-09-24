@@ -132,7 +132,8 @@ void check_pulsadores (void){
 /////////////////////////////////////////
 
 void init_menuPrincipal (void){
-	set_pantalla("Estoy en el menu principal");
+
+	set_pantalla(PANT_init_menuPrincipal);
 //	menuActual = &menu[MENU_PRINCIPAL];
 }
 
@@ -148,7 +149,7 @@ void init_setLlenado (void){
 //			//status_menuLlenado = 90;
 //		break;
 //	} //end switch status_menuTablero
-	set_pantalla("elije tiempo on u off");
+	set_pantalla(PANT_init_setLlenado);
 
 } //end init_llenado()
 
@@ -158,11 +159,15 @@ void init_llenado (void){
 	switch (status_menuLlenado) {
 		case PREGUNTA_SENSOR:
 			set_led(OUT_led_napa, PRENDIDO);
-			set_pantalla("Sensor conectado?");
+			set_pantalla(PANT_sensor_conectado);
 		break;
-		default:
-			set_pantalla("Llenando. terminar?");
+		case LLENANDO_CHECK:
+			set_pantalla(PANT_llenando_terminar);
 			//status_menuLlenado = 90;
+		break;
+		case CONECTE_SENSOR:
+			set_pantalla(PANT_CONECTE_SENSOR);
+		default:
 		break;
 	} //end switch status_menuTablero
 
@@ -170,17 +175,17 @@ void init_llenado (void){
 
 
 void init_skimmer (void){
-	set_pantalla("COMPRUEBE EL ESTADO DE LA BOMBA");
+	set_pantalla(PANT_init_skimmer);
 }
 
 
 void init_hidro (void){
-	set_pantalla("LIMITE DE TIEMPO");
+	set_pantalla(PANT_init_hidro);
 }
 
 
 void init_lucesExt (void){
-	set_pantalla("LIMITE DE TIEMPO");
+	set_pantalla(PANT_init_lucesExt);
 }
 
 
@@ -297,13 +302,13 @@ void acc_setLlenado (void){
 
 		case ELIJE_ON_OFF_LLENADO:
 			if (getStatBoton(IN_1) == FALL) {
-				set_pantalla("defina el tiempo de duracion ON:");
+				set_pantalla(PANT_PERIODO_ON_LLENADO);
 				status_menuLlenado = PERIODO_ON_LLENADO;
 				break;
 			}
 
 			if (getStatBoton(IN_2) == FALL) {
-				set_pantalla("defina el tiempo de duracion OFF:");
+				set_pantalla(PANT_PERIODO_OFF_LLENADO);
 				status_menuLlenado = PERIODO_OFF_LLENADO;
 				break;
 			}
@@ -341,13 +346,13 @@ void acc_llenado (void){
 		case PREGUNTA_SENSOR:
 
 			if (getStatBoton(IN_HASH) == FALL) { //CONFIRMO
-				set_pantalla("COMPRUEBE EL SENSOR Y PULSE EL BOTON...");
+				set_pantalla(PANT_COMPRUEBE_SENSOR);
 				status_menuLlenado = COMPRUEBE_SENSOR;
 				break;
 			}
 
 			if (getStatBoton(IN_AST) == FALL) { //niego
-				set_pantalla("CONECTE EL SENSOR");
+				set_pantalla(PANT_CONECTE_SENSOR);
 				status_menuLlenado = CONECTE_SENSOR;
 				break;
 			}
@@ -364,7 +369,7 @@ void acc_llenado (void){
 			}
 
 			if (getStatBoton(IN_HASH) == FALL) { //CONFIRMO
-				set_pantalla("¿Sensor conectado?");
+				set_pantalla(PANT_PREGUNTA_SENSOR);
 				status_menuLlenado = PREGUNTA_SENSOR;
 				break;
 			}
@@ -372,26 +377,65 @@ void acc_llenado (void){
 		case COMPRUEBE_SENSOR:
 
 			if (getStatBoton(IN_HASH) == FALL) { //CONFIRMO
-				set_pantalla("llenando...");
+				set_pantalla(PANT_LLENANDO);
 				runProg_llenado(PROG_RUN);
 				status_menuLlenado = LLENANDO;
 				break;
 			}
 
 			if (getStatBoton(IN_AST) == FALL) { //volver
-				set_pantalla("¿Sensor conectado?");
+				set_pantalla(PANT_PREGUNTA_SENSOR);
 				status_menuLlenado = PREGUNTA_SENSOR;
 				break;
 			}
 
 		break;
 		case LLENANDO:
-
 			if (runProg_llenado(PROG_CHECK) == PROG_FINISHED ) { //LOGICA NEGATIVA
-				set_pantalla("pileta llena.");
+				set_pantalla(PANT_PILETA_LLENA);
 				status_menuLlenado = PILETA_LLENA;
 				break;
 			}
+
+			if (getStatBoton(IN_HASH) == FALL) { //CONFIRMO
+				//vuelve al menu principal
+				status_menuLlenado = LLENANDO_CHECK;
+				menuActual = &menu[MENU_PRINCIPAL];
+				menuActual->inicia_menu();
+				break;
+			}
+
+			if (getStatBoton(IN_AST) == FALL) { //volver
+				//vuelve al menu principal
+				status_menuLlenado = LLENANDO_CHECK;
+				menuActual = &menu[MENU_PRINCIPAL];
+				menuActual->inicia_menu();
+				break;
+			}
+		break;
+		case LLENANDO_CHECK:
+			if (runProg_llenado(PROG_CHECK) == PROG_FINISHED ) { //LOGICA NEGATIVA
+				set_pantalla(PANT_PILETA_LLENA);
+				status_menuLlenado = PILETA_LLENA;
+				break;
+			}
+
+			if (getStatBoton(IN_HASH) == FALL) { //CONFIRMO
+				status_menuLlenado = PREGUNTA_SENSOR;
+				runProg_llenado(PROG_STOP);
+				//vuelve al menu principal
+				menuActual = &menu[MENU_PRINCIPAL];
+				menuActual->inicia_menu();
+				break;
+			}
+
+			if (getStatBoton(IN_AST) == FALL) { //volver
+				//vuelve al menu principal
+				menuActual = &menu[MENU_PRINCIPAL];
+				menuActual->inicia_menu();
+				break;
+			}
+		break;
 		case PILETA_LLENA:
 			if (getStatBoton(IN_HASH) == FALL) { //CONFIRMO
 				//vuelve al menu principal
@@ -424,7 +468,7 @@ void acc_skimmer (void){
 			}
 
 			if (getStatBoton(IN_HASH) == FALL) {
-				set_pantalla("elija freecuecia u horario");
+				set_pantalla(PANT_OPCIONES_SKIMMER);
 				status_menuSkimmer = OPCIONES_SKIMMER;
 				break;
 			}
@@ -435,32 +479,32 @@ void acc_skimmer (void){
 			}
 
 			if (getStatBoton(IN_1) == FALL) {
-				set_pantalla("elijo timepo ON o timepo OFF");
+				set_pantalla(PANT_ELIJE_FRECUENCIA_SKIMMER);
 				status_menuSkimmer = ELIJE_FRECUENCIA_SKIMMER;
 				break;
 			}
 
 			if (getStatBoton(IN_2) == FALL) {
-				set_pantalla("elijo programa 1 o programa 2");
+				set_pantalla(PANT_ELIJE_PROGRAMA_SKIMMER);
 				status_menuSkimmer = ELIJE_PROGRAMA_SKIMMER;
 				break;
 			}
 		break;
 		case ELIJE_FRECUENCIA_SKIMMER:
 			if (getStatBoton(IN_1) == FALL) {
-				set_pantalla("defina el tiempo de duracion ON:");
+				set_pantalla(PANT_PERIODO_ON_SKIMMER);
 				status_menuSkimmer = PERIODO_ON_SKIMMER;
 				break;
 			}
 
 			if (getStatBoton(IN_2) == FALL) {
-				set_pantalla("defina el tiempo de duracion OFF:");
+				set_pantalla(PANT_PERIODO_OFF_SKIMMER);
 				status_menuSkimmer = PERIODO_OFF_SKIMMER;
 				break;
 			}
 
 			if (getStatBoton(IN_AST) == FALL) {
-				set_pantalla("elija freecuecia u horario");
+				set_pantalla(PANT_OPCIONES_SKIMMER);
 				status_menuSkimmer = OPCIONES_SKIMMER;
 				break;
 			}
@@ -474,20 +518,20 @@ void acc_skimmer (void){
 		case ELIJE_PROGRAMA_SKIMMER:
 			if (getStatBoton(IN_1) == FALL) {
 				//levanta el flag de modificar el programa 1
-				set_pantalla("elije horario ON u horario OFF");
+				set_pantalla(PANT_ELIJE_ON_OFF_HORARIO_SKIMMER);
 				status_menuSkimmer = ELIJE_ON_OFF_HORARIO_SKIMMER;
 				break;
 			}
 
 			if (getStatBoton(IN_2) == FALL) {
 				//levanta el flag de modificar el programa 2
-				set_pantalla("elije horario ON u horario OFF");
+				set_pantalla(PANT_ELIJE_ON_OFF_HORARIO_SKIMMER);
 				status_menuSkimmer = ELIJE_ON_OFF_HORARIO_SKIMMER;
 				break;
 			}
 
 			if (getStatBoton(IN_AST) == FALL) {
-				set_pantalla("elija freecuecia u horario");
+				set_pantalla(PANT_OPCIONES_SKIMMER);
 				status_menuSkimmer = OPCIONES_SKIMMER;
 				break;
 			}
@@ -495,20 +539,20 @@ void acc_skimmer (void){
 		case ELIJE_ON_OFF_HORARIO_SKIMMER:
 			if (getStatBoton(IN_1) == FALL) {
 				//levanta el flag de modificar el horario ON
-				set_pantalla("defina el horario ON");
+				set_pantalla(PANT_HORARIO_ON_SKIMMER);
 				status_menuSkimmer = HORARIO_ON_SKIMMER;
 				break;
 			}
 
 			if (getStatBoton(IN_2) == FALL) {
 				//levanta el flag de modificar el horario OFF
-				set_pantalla("defina el horario OFF");
+				set_pantalla(PANT_HORARIO_OFF_SKIMMER);
 				status_menuSkimmer = HORARIO_OFF_SKIMMER;
 				break;
 			}
 
 			if (getStatBoton(IN_AST) == FALL) {
-				set_pantalla("elijo programa 1 o programa 2");
+				set_pantalla(PANT_ELIJE_PROGRAMA_SKIMMER);
 				status_menuSkimmer = ELIJE_PROGRAMA_SKIMMER;
 				break;
 			}

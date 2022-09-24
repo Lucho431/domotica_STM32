@@ -1,4 +1,5 @@
 display_tablero.c:14:6:init_pantalla	8	static
-display_tablero.c:19:6:set_pantalla	16	static
-display_tablero.c:24:6:pantallaLista	4	static
-display_tablero.c:28:6:pantallaUpdate	8	static
+display_tablero.c:25:6:set_pantalla	16	static
+display_tablero.c:119:6:setTexto_pantalla	16	static
+display_tablero.c:125:6:pantallaLista	4	static
+display_tablero.c:129:6:pantallaUpdate	8	static
