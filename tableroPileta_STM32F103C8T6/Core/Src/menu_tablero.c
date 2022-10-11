@@ -18,7 +18,7 @@ T_MENU* menuAux;
 //variables tomas
 uint8_t flag_tomas = 0;
 //variables funciones
-T_POS_OUTPUT aux_progOutput;
+T_PROG_OUTPUT aux_progOutput;
 uint8_t pulsoLargo_skimmer = 0;
 uint8_t pulsoLargo_luz = 0;
 
@@ -69,6 +69,17 @@ void check_menu (void){
 	menuActual->accion();
 }
 
+void check_duracionPulsadores (void){
+
+	if (pulsoLargo_skimmer != 0){
+		pulsoLargo_skimmer--;
+	}
+
+	if (pulsoLargo_luz != 0){
+		pulsoLargo_luz--;
+	}
+} //end check_duracionPulsadores ()
+
 void check_pulsadores (void){
 
 	if (getStatBoton(IN_jet) == FALL){
@@ -110,19 +121,30 @@ void check_pulsadores (void){
 		}
 
 
-	}
+	} //end if getStatBoton(IN_pileta)
+
 	if (pulsoLargo_skimmer != 0){
+
 		if (getStatBoton(IN_pileta) == HIGH_L){ //pulso corto
 			runProg_skimmer(PROG_SET1); //con programa
-		}else{
-			pulsoLargo_skimmer--;
-			if (!pulsoLargo_skimmer){ //pulso largo
-				runProg_skimmer(PROG_SET2); //sin programa
-			}
+			pulsoLargo_skimmer = 0;
 		}
-	}
-	if (getStatBoton(IN_pileta) == LOW_L){
 
+		if (!pulsoLargo_skimmer){ //pulso largo
+			runProg_skimmer(PROG_SET2); //sin programa
+		}
+
+	}else{
+
+		if (getStatBoton(IN_pileta) == LOW_L){
+
+		}
+
+	} //end if pulsoLargo_skimmer != 0
+
+
+	if (getStatBoton(IN_pileta) == LOW_L){
+		__NOP();
 	}
 
 }
@@ -167,6 +189,7 @@ void init_llenado (void){
 		break;
 		case CONECTE_SENSOR:
 			set_pantalla(PANT_CONECTE_SENSOR);
+			set_led(OUT_led_napa, PRENDIDO);
 		default:
 		break;
 	} //end switch status_menuTablero
@@ -205,21 +228,42 @@ void init_config (void){
 
 void acc_menuPrincipal (void){
 
-	if (getStatBoton(IN_napa)==FALL){
-		menuActual = &menu[MENU_SET_LLENADO];
-		menuActual->menuAnterior = &menu[MENU_PRINCIPAL];
-		menuActual->inicia_menu();
-		return;
-	}
+//	if (getStatBoton(IN_napa)==FALL){
+//		menuActual = &menu[MENU_SET_LLENADO];
+//		menuActual->menuAnterior = &menu[MENU_PRINCIPAL];
+//		menuActual->inicia_menu();
+//		return;
+//	}
 
 	//RE VER: debería ejecutar el programa y no configurarlo...
+
 	if (getStatBoton(IN_jet)==FALL){
 		menuActual = &menu[MENU_HIDRO];
 		menuActual->menuAnterior = &menu[MENU_PRINCIPAL];
 		menuActual->inicia_menu();
 		return;
 	}
-}
+
+	if (getStatBoton(IN_A)==FALL){
+
+	}
+
+	if (getStatBoton(IN_B)==FALL){
+
+	}
+
+	if (getStatBoton(IN_C)==FALL){
+
+	}
+
+	if (getStatBoton(IN_D)==FALL){
+		menuActual = &menu[MENU_LUCES_EXT];
+		menuActual->menuAnterior = &menu[MENU_PRINCIPAL];
+		menuActual->inicia_menu();
+		return;
+	}
+
+} //end acc_menuPrincipal()
 
 
 void acc_setLlenado (void){

@@ -7,13 +7,24 @@
 
 #include "leds_tablero.h"
 
-T_STATUS_LED status_led [6] = {
-		APAGADO, //tomas
-		APAGADO, //luces ext (amarillas)
+T_STATUS_LED status_led [16] = {
 		APAGADO, //leds (pileta, supongo)
 		APAGADO, //napa
 		APAGADO, //jets
-		APAGADO //pileta
+		APAGADO, //pileta
+		APAGADO, //DESUSO
+		APAGADO, //DESUSO
+		APAGADO, //DESUSO
+		APAGADO, //DESUSO
+
+		APAGADO, //DESUSO
+		APAGADO, //DESUSO
+		APAGADO, //DESUSO
+		APAGADO, //DESUSO
+		APAGADO, //DESUSO
+		APAGADO, //DESUSO
+		APAGADO, //luces ext (amarillas)
+		APAGADO, //tomas
 };
 
 uint8_t demora_rapida = 19; //equivale a 200 ms: (valor + 1)*10ms
@@ -22,23 +33,24 @@ uint8_t demora_lenta = 49; //equivale a 500 ms: (valor + 1)*10ms
 
 void update_leds (void){ //LOGICA NEGATIVA
 
-	for (uint8_t i=0; i < 6; i++){
+	for (uint8_t i=0; i < 4; i++){
 
 		switch (status_led[i]) {
 			case APAGADO:
-				setOutput(OUT_led_tomas + i, 1); //APAGA LED
+				setOutput(i, 1); //APAGA LED
 			break;
 			case PRENDIDO:
-				setOutput(OUT_led_tomas + i, 0); //PRENDE LED
+				setOutput(i, 0); //PRENDE LED
+			break;
 			case TITILA_LENTO:
 				if (!demora_lenta){
-					toggleOutput (OUT_led_tomas + i);
+					toggleOutput (i);
 					break;
 				}
 			break;
 			case TITILA_RAPIDO:
 				if (!demora_rapida){
-					toggleOutput (OUT_led_tomas + i);
+					toggleOutput (i);
 					break;
 				}
 			break;
@@ -48,16 +60,60 @@ void update_leds (void){ //LOGICA NEGATIVA
 
 	} //end for uint8_t i...
 
+	switch (status_led[14]) {
+		case APAGADO:
+			setOutput(OUT_led_luces, 1); //APAGA LED
+			break;
+		case PRENDIDO:
+			setOutput(OUT_led_luces, 0); //PRENDE LED
+		case TITILA_LENTO:
+			if (!demora_lenta){
+				toggleOutput (OUT_led_luces);
+				break;
+			}
+			break;
+		case TITILA_RAPIDO:
+			if (!demora_rapida){
+				toggleOutput (OUT_led_luces);
+				break;
+			}
+			break;
+		default:
+			break;
+	} //end switch status_led
+
+	switch (status_led[15]) {
+		case APAGADO:
+			setOutput(OUT_led_tomas, 1); //APAGA LED
+			break;
+		case PRENDIDO:
+			setOutput(OUT_led_tomas, 0); //PRENDE LED
+		case TITILA_LENTO:
+			if (!demora_lenta){
+				toggleOutput (OUT_led_tomas);
+				break;
+			}
+			break;
+		case TITILA_RAPIDO:
+			if (!demora_rapida){
+				toggleOutput (OUT_led_tomas);
+				break;
+			}
+			break;
+		default:
+			break;
+	} //end switch status_led
+
 	if (demora_lenta != 0){
 		demora_lenta--;
 	}else{
-		demora_lenta = 5; // por 100 ms.
+		demora_lenta = 4; // por 10 ms.
 	}
 
 	if (demora_rapida != 0){
 		demora_rapida--;
 	}else{
-		demora_rapida = 1; // por 100 ms.
+		demora_rapida = 1; // por 10 ms.
 	}
 
 } //end update_leds()
@@ -65,8 +121,6 @@ void update_leds (void){ //LOGICA NEGATIVA
 
 void set_led (T_POS_OUTPUT l, T_STATUS_LED val){
 
-	if (l < OUT_led_tomas) return;
-
-	status_led [l - OUT_led_tomas] = val;
+	status_led [l] = val;
 
 } //end set_led()

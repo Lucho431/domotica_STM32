@@ -20,7 +20,7 @@ RTC_DateTypeDef auxFecha;
 RTC_TimeTypeDef auxHora;
 
 //variables hidro
-T_PROG_OUTPUT status_progHidro;
+T_PROG_OUTPUT status_progHidro = PROG_IDLE;
 int16_t tiempoHidroAux = 0;
 int16_t tiempoHidro = 0;
 uint8_t statusTiempoHidro = 0;
@@ -28,7 +28,7 @@ RTC_TimeTypeDef hora_hidro;
 RTC_DateTypeDef fecha_hidro;
 
 //variables llenado
-T_PROG_OUTPUT status_progLlenado;
+T_PROG_OUTPUT status_progLlenado = PROG_IDLE;
 int16_t tiempoLlenadoAux = 0;
 int16_t tiempoLlenado_ON = 0;
 int16_t tiempoLlenado_OFF = 0;
@@ -40,7 +40,7 @@ RTC_DateTypeDef fecha_llenadoOff;
 uint8_t flag_bombaNapa = 0;
 
 //variables pileta/skimmer
-T_PROG_OUTPUT status_progPileta;
+T_PROG_OUTPUT status_progPileta = PROG_IDLE;
 uint8_t status_modoPileta = 0; //0: apagado; 1: con programa; 2: sin programa.
 
 /////////////////////////////////////////
@@ -380,7 +380,7 @@ T_PROG_OUTPUT runProg_llenado (T_PROG_CMD cmd){
 
 			auxFecha = get_fecha();
 			auxHora = get_hora();
-
+/*
 			switch (flag_bombaNapa) {
 				case 1:
 					if (fecha_llenadoOn.Date < auxFecha.Date) {
@@ -452,7 +452,8 @@ T_PROG_OUTPUT runProg_llenado (T_PROG_CMD cmd){
 				default:
 				break;
 			} //end switch flag_bombaNapa...
-
+*/
+			__NOP();
 		break;
 		case PROG_STOP:
 			setOutput(OUT_rele_napa, 0); //logica positiva

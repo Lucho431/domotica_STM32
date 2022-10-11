@@ -3,6 +3,6 @@ funciones_tablero.c:138:15:setProg_llenado	24	static
 funciones_tablero.c:262:15:setProg_skimmer	16	static,ignoring_inline_asm
 funciones_tablero.c:267:15:setProg_luz	16	static,ignoring_inline_asm
 funciones_tablero.c:275:15:runProg_hidro	16	static
-funciones_tablero.c:349:15:runProg_llenado	16	static
-funciones_tablero.c:477:15:runProg_skimmer	16	static,ignoring_inline_asm
-funciones_tablero.c:523:15:runProg_luz	16	static,ignoring_inline_asm
+funciones_tablero.c:349:15:runProg_llenado	16	static,ignoring_inline_asm
+funciones_tablero.c:478:15:runProg_skimmer	16	static,ignoring_inline_asm
+funciones_tablero.c:524:15:runProg_luz	16	static,ignoring_inline_asm

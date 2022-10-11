@@ -116,7 +116,7 @@ int main(void)
   spi_74HC165_init(&hspi2, OUT_PL_GPIO_Port, OUT_PL_Pin, OUT_CE_GPIO_Port, OUT_CE_Pin);
   spi_74HC595_init(&hspi2, OUT_ST_GPIO_Port, OUT_ST_Pin);
 
-  HAL_TIM_Base_Start_IT(&htim2); //ticks eery 10 ms.
+  HAL_TIM_Base_Start_IT(&htim2); //ticks every 10 ms.
 
 
   start_menu();
@@ -128,13 +128,12 @@ int main(void)
   {
 	  update_teclas();
 
-	  uint8_t pruebaNumero = getNumber();
+//	  uint8_t pruebaNumero = getNumber();
 
 	  if (flag_tick){ //ticks every 10 ms.
 
 		  update_horaFecha();
-
-//		  update_teclas();
+		  check_duracionPulsadores();
 
 		  if (flag_lecturas != 0){ //para demorar las lecturas de teclas cada 30 ms.
 			  flag_lecturas--;
@@ -150,6 +149,9 @@ int main(void)
 			  update_leds();
 			  update_outputs();
 
+//			  uint8_t datoPrueba[2] = {0xFF, 0xFF};
+//			  spi_74HC595_Transmit(datoPrueba, 2);
+
 			  flag_salidas = 9;
 		  }
 
@@ -158,11 +160,10 @@ int main(void)
 			  refresh_pantalla = 29;
 		  }
 
-		  check_pulsadores();
-
 		  flag_tick = 0;
 	  }//end if flag_tick
 
+	  check_pulsadores();
 	  check_menu();
 	  runProg_hidro(PROG_CHECK);
 	  runProg_llenado(PROG_CHECK);

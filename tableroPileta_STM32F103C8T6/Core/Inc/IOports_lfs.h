@@ -45,18 +45,18 @@ typedef enum{
 
 
 typedef enum{
-	OUT_rele_tomas,
+	OUT_led_tomas = 15,
+	OUT_led_luces = 14,
+	OUT_led_leds = 0,
+	OUT_led_napa,
+	OUT_led_jet,
+	OUT_led_pileta,
+	OUT_rele_tomas = 8,
 	OUT_rele_luces,
 	OUT_rele_leds,
 	OUT_rele_napa,
 	OUT_rele_jet,
 	OUT_rele_pileta,
-	OUT_led_tomas,
-	OUT_led_luces,
-	OUT_led_leds,
-	OUT_led_napa,
-	OUT_led_jet,
-	OUT_led_pileta,
 	SIZEOF_POS_OUTPUT,
 }T_POS_OUTPUT;
 
