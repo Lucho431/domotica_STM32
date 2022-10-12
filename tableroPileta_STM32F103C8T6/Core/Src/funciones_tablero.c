@@ -137,24 +137,11 @@ T_PROG_OUTPUT setProg_hidro (T_PROG_CMD cmd){
 
 T_PROG_OUTPUT setProg_llenado (T_PROG_CMD cmd){
 
-//	if (cmd != PROG_RUN) return PROG_ERROR;
-//
-//	if (!HAL_GPIO_ReadPin(IN_nivelAgua_GPIO_Port, IN_nivelAgua_Pin)) { //LOGICA NEGATIVA
-//		return PROG_ERROR;
-//	}
-//
-//	setOutput(OUT_rele_napa, 1); //logica positiva
-//	//falta manejar los led
-//
-//	return PROG_FINISHED;
-
 	int8_t newNumber = getNumber();
 
 	switch (statusTiempoLlenado) {
 		case 0: //tiempo en 0.
 			if (getStatBoton(IN_AST) == FALL) {
-//							menuActual = menuActual->menuPadre;
-				//			HMI_setPage(menuActual->nombre);
 				return PROG_IDLE;
 			}
 
@@ -261,11 +248,13 @@ T_PROG_OUTPUT setProg_llenado (T_PROG_CMD cmd){
 
 T_PROG_OUTPUT setProg_skimmer (T_PROG_CMD cmd){
 	__NOP();
+	return PROG_IDLE;
 } //end setProg_skimmer()
 
 
 T_PROG_OUTPUT setProg_luz (T_PROG_CMD cmd){
 	__NOP();
+	return PROG_IDLE;
 } //end setProg_luz()
 
 /////////////////////////////////////////
@@ -523,4 +512,5 @@ T_PROG_OUTPUT runProg_skimmer (T_PROG_CMD cmd){
 
 T_PROG_OUTPUT runProg_luz (T_PROG_CMD cmd){
 	__NOP();
+	return PROG_IDLE;
 }

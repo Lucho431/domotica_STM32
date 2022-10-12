@@ -1,8 +1,8 @@
 funciones_tablero.c:50:15:setProg_hidro	24	static
 funciones_tablero.c:138:15:setProg_llenado	24	static
-funciones_tablero.c:262:15:setProg_skimmer	16	static,ignoring_inline_asm
-funciones_tablero.c:267:15:setProg_luz	16	static,ignoring_inline_asm
-funciones_tablero.c:275:15:runProg_hidro	16	static
-funciones_tablero.c:349:15:runProg_llenado	16	static,ignoring_inline_asm
-funciones_tablero.c:478:15:runProg_skimmer	16	static,ignoring_inline_asm
-funciones_tablero.c:524:15:runProg_luz	16	static,ignoring_inline_asm
+funciones_tablero.c:249:15:setProg_skimmer	16	static,ignoring_inline_asm
+funciones_tablero.c:255:15:setProg_luz	16	static,ignoring_inline_asm
+funciones_tablero.c:264:15:runProg_hidro	16	static
+funciones_tablero.c:338:15:runProg_llenado	16	static,ignoring_inline_asm
+funciones_tablero.c:467:15:runProg_skimmer	16	static,ignoring_inline_asm
+funciones_tablero.c:513:15:runProg_luz	16	static,ignoring_inline_asm
