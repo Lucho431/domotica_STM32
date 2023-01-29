@@ -137,11 +137,24 @@ T_PROG_OUTPUT setProg_hidro (T_PROG_CMD cmd){
 
 T_PROG_OUTPUT setProg_llenado (T_PROG_CMD cmd){
 
+//	if (cmd != PROG_RUN) return PROG_ERROR;
+//
+//	if (!HAL_GPIO_ReadPin(IN_nivelAgua_GPIO_Port, IN_nivelAgua_Pin)) { //LOGICA NEGATIVA
+//		return PROG_ERROR;
+//	}
+//
+//	setOutput(OUT_rele_napa, 1); //logica positiva
+//	//falta manejar los led
+//
+//	return PROG_FINISHED;
+
 	int8_t newNumber = getNumber();
 
 	switch (statusTiempoLlenado) {
 		case 0: //tiempo en 0.
 			if (getStatBoton(IN_AST) == FALL) {
+//							menuActual = menuActual->menuPadre;
+				//			HMI_setPage(menuActual->nombre);
 				return PROG_IDLE;
 			}
 
@@ -248,13 +261,11 @@ T_PROG_OUTPUT setProg_llenado (T_PROG_CMD cmd){
 
 T_PROG_OUTPUT setProg_skimmer (T_PROG_CMD cmd){
 	__NOP();
-	return PROG_IDLE;
 } //end setProg_skimmer()
 
 
 T_PROG_OUTPUT setProg_luz (T_PROG_CMD cmd){
 	__NOP();
-	return PROG_IDLE;
 } //end setProg_luz()
 
 /////////////////////////////////////////
@@ -457,7 +468,7 @@ T_PROG_OUTPUT runProg_llenado (T_PROG_CMD cmd){
 
 	if (!HAL_GPIO_ReadPin(IN_nivelAgua_GPIO_Port, IN_nivelAgua_Pin)) { //LOGICA NEGATIVA
 		setOutput(OUT_rele_napa, 0); //logica positiva
-		//falta manejar los led
+		set_led(OUT_led_napa, APAGADO);
 		return PROG_FINISHED;
 	}
 	return PROG_BUSY;
@@ -471,10 +482,12 @@ T_PROG_OUTPUT runProg_skimmer (T_PROG_CMD cmd){
 		case PROG_SET1: //con programa
 			status_modoPileta = 1;
 			status_progPileta = PROG_BUSY;
+			set_led(OUT_led_pileta, TITILA_LENTO);
 			break;
 		case PROG_SET2: //sin programa
 			status_modoPileta = 2;
 			status_progPileta = PROG_BUSY;
+			set_led(OUT_led_pileta, TITILA_RAPIDO);
 			break;
 		case PROG_STOP:
 			setOutput(OUT_rele_pileta, 0); //LOGICA POSITIVA
@@ -483,7 +496,7 @@ T_PROG_OUTPUT runProg_skimmer (T_PROG_CMD cmd){
 			status_progPileta = PROG_IDLE;
 			break;
 		case PROG_CHECK:
-			if (status_progHidro == PROG_IDLE){
+			if (status_progPileta == PROG_IDLE){
 				//return PROG_IDLE;
 				break;
 			}
@@ -493,11 +506,10 @@ T_PROG_OUTPUT runProg_skimmer (T_PROG_CMD cmd){
 
 					break;
 				case 1:
-
+					setOutput(OUT_rele_pileta, 1); //logica positiva
 					break;
 				case 2:
 					setOutput(OUT_rele_pileta, 1); //logica positiva
-					set_led(OUT_led_pileta, TITILA_RAPIDO);
 					break;
 				default:
 					break;
@@ -512,5 +524,4 @@ T_PROG_OUTPUT runProg_skimmer (T_PROG_CMD cmd){
 
 T_PROG_OUTPUT runProg_luz (T_PROG_CMD cmd){
 	__NOP();
-	return PROG_IDLE;
 }

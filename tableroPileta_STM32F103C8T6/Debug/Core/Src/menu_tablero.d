@@ -31,7 +31,8 @@ Core/Src/menu_tablero.o: ../Core/Src/menu_tablero.c \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h \
  ../Core/Inc/IOports_lfs.h ../Core/Inc/main.h \
  ../Core/Inc/display_tablero.h ../Core/Inc/funciones_tablero.h \
- ../Core/Inc/leds_tablero.h ../Core/Inc/IOports_lfs.h
+ ../Core/Inc/leds_tablero.h ../Core/Inc/IOports_lfs.h \
+ ../Core/Inc/hora_tablero.h ../Core/Inc/rtc.h
 
 ../Core/Inc/menu_tablero.h:
 
@@ -104,3 +105,7 @@ Core/Src/menu_tablero.o: ../Core/Src/menu_tablero.c \
 ../Core/Inc/leds_tablero.h:
 
 ../Core/Inc/IOports_lfs.h:
+
+../Core/Inc/hora_tablero.h:
+
+../Core/Inc/rtc.h:

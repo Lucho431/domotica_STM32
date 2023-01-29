@@ -112,10 +112,10 @@ T_INPUT getStatBoton (T_POS_INPUT b){
 	if ( (fall_input & (1 << b)) != 0)
 		return FALL;
 
-	if (rise_input & (1 << b) != 0)
+	if ( (rise_input & (1 << b)) != 0)
 		return RISE;
 
-	if (read_input & (1 << b) != 0)
+	if ( (read_input & (1 << b)) != 0)
 		return HIGH_L;
 
 	return LOW_L;

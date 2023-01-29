@@ -19,7 +19,6 @@ typedef struct t_menu {
 
 typedef enum{
 	MENU_PRINCIPAL,
-	MENU_LLENADO,
 	MENU_SET_LLENADO,
 	MENU_SKIMMER,
 	MENU_HIDRO,
@@ -58,7 +57,6 @@ typedef enum{
 typedef enum{
 	LIMITE_TIEMPO_HIDRO,
 	ELIJE_TIEMPO_HIDRO,
-	TIEMPO_HIDRO_GUARDADO,
 } T_STATUS_HIDRO;
 
 typedef enum{

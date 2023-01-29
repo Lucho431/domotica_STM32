@@ -26,9 +26,9 @@ void set_fecha (void){
 }
 
 RTC_TimeTypeDef get_hora (void){
-	__NOP();
+	return hora;
 }
 
 RTC_DateTypeDef get_fecha (void){
-
+	return aux_fecha;
 }
