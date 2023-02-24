@@ -10,15 +10,9 @@
 
 #include "stm32f1xx_hal.h"
 
-typedef struct t_menu {
-	int8_t nombre;
-	struct t_menu* menuAnterior;
-	void (*inicia_menu) (void);
-	void (*accion) (void);
-} T_MENU;
-
 typedef enum{
 	MENU_PRINCIPAL,
+	MENU_LLENADO,
 	MENU_SET_LLENADO,
 	MENU_SKIMMER,
 	MENU_HIDRO,
@@ -27,6 +21,13 @@ typedef enum{
 	MENU_CONFIG,
 	SIZE_MENU_NOMBRE,
 } T_MENU_NOMBRE;
+
+typedef struct t_menu {
+	T_MENU_NOMBRE nombre;
+	struct t_menu* menuAnterior;
+	void (*inicia_menu) (void);
+	void (*accion) (void);
+} T_MENU;
 
 
 typedef enum{

@@ -32,7 +32,7 @@ T_PROG_OUTPUT status_progLlenado = PROG_IDLE;
 int16_t tiempoLlenadoAux = 0;
 int16_t tiempoLlenado_ON = 0;
 int16_t tiempoLlenado_OFF = 0;
-uint8_t statusTiempoLlenado = 0;
+uint8_t statusTiempoLlenado = 99;
 RTC_TimeTypeDef hora_llenadoOn;
 RTC_DateTypeDef fecha_llenadoOn;
 RTC_TimeTypeDef hora_llenadoOff;
@@ -52,10 +52,25 @@ T_PROG_OUTPUT setProg_hidro (T_PROG_CMD cmd){
 	int8_t newNumber = getNumber();
 
 	switch (statusTiempoHidro) {
+		case 99: //imprime al entrar al sub-menu
+
+			tiempoHidroAux = tiempoHidro;
+			sprintf(texto, "%d min.", tiempoHidroAux);
+			setTexto_pantalla(texto);
+			if (!tiempoHidroAux){
+				statusTiempoHidro = 0;
+				break;
+			}else if (tiempoHidroAux < 10){
+				statusTiempoHidro = 1;
+				break;
+			}else{
+				statusTiempoHidro = 2;
+				break;
+			}
+		break;
 		case 0: //tiempo en 0.
 			if (getStatBoton(IN_AST) == FALL) {
-//			menuActual = menuActual->menuPadre;
-//			HMI_setPage(menuActual->nombre);
+				statusTiempoHidro = 99;
 				return PROG_IDLE;
 			}
 
@@ -120,7 +135,7 @@ T_PROG_OUTPUT setProg_hidro (T_PROG_CMD cmd){
 		case 3: //retorna y graba el valor
 
 			tiempoHidro = tiempoHidroAux;
-			statusTiempoHidro = 0;
+			statusTiempoHidro = 99;
 
 			return PROG_FINISHED;
 		break;
@@ -137,24 +152,35 @@ T_PROG_OUTPUT setProg_hidro (T_PROG_CMD cmd){
 
 T_PROG_OUTPUT setProg_llenado (T_PROG_CMD cmd){
 
-//	if (cmd != PROG_RUN) return PROG_ERROR;
-//
-//	if (!HAL_GPIO_ReadPin(IN_nivelAgua_GPIO_Port, IN_nivelAgua_Pin)) { //LOGICA NEGATIVA
-//		return PROG_ERROR;
-//	}
-//
-//	setOutput(OUT_rele_napa, 1); //logica positiva
-//	//falta manejar los led
-//
-//	return PROG_FINISHED;
-
 	int8_t newNumber = getNumber();
 
 	switch (statusTiempoLlenado) {
+		case 99: //imprime al entrar al sub-menu
+			switch (cmd) {
+				case PROG_SET1:
+					tiempoLlenadoAux = tiempoLlenado_ON;
+				break;
+				case PROG_SET2:
+					tiempoLlenadoAux = tiempoLlenado_OFF;
+				default:
+				break;
+			} //end switch cmd
+			sprintf(texto, "%d min.", tiempoLlenadoAux);
+			setTexto_pantalla(texto);
+			if (!tiempoLlenadoAux){
+				statusTiempoLlenado = 0;
+				break;
+			}else if (tiempoLlenadoAux < 10){
+				statusTiempoLlenado = 1;
+				break;
+			}else{
+				statusTiempoLlenado = 2;
+				break;
+			}
+		break;
 		case 0: //tiempo en 0.
 			if (getStatBoton(IN_AST) == FALL) {
-//							menuActual = menuActual->menuPadre;
-				//			HMI_setPage(menuActual->nombre);
+				statusTiempoLlenado = 99;
 				return PROG_IDLE;
 			}
 
@@ -194,7 +220,7 @@ T_PROG_OUTPUT setProg_llenado (T_PROG_CMD cmd){
 				tiempoLlenadoAux /= 10;
 				sprintf(texto, "%d min.", tiempoLlenadoAux);
 				setTexto_pantalla(texto);
-				if (statusTiempoLlenado < 10) {
+				if (tiempoLlenadoAux < 10) {
 					statusTiempoLlenado = 1;
 				}
 				break;
@@ -245,7 +271,7 @@ T_PROG_OUTPUT setProg_llenado (T_PROG_CMD cmd){
 				break;
 			} //end switch cmd
 
-			statusTiempoLlenado = 0;
+			statusTiempoLlenado = 99;
 			return PROG_FINISHED;
 
 		break;

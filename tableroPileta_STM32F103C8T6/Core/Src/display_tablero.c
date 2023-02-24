@@ -43,14 +43,16 @@ void set_pantalla (T_PANTALLA p){
 			ST7920_SendString(2, 0, "BOMBA");
 		break;
 		case PANT_init_hidro:
-			ST7920_SendString(0, 0, "LIMITE DE TIEMPO");
+			ST7920_SendString(0, 0, "defina el tiempo");
+			ST7920_SendString(1, 0, "del hidromasaje:");
 		break;
 		case PANT_init_lucesExt:
 			ST7920_SendString(0, 0, "LIMITE DE TIEMPO");
 		break;
 		case PANT_init_setLlenado:
-			ST7920_SendString(0, 0, "elije tiempo");
-			ST7920_SendString(1, 0, "on u off");
+			ST7920_SendString(0, 0, "Config. llenado");
+			ST7920_SendString(1, 0, "1: duracion ON");
+			ST7920_SendString(2, 0, "2: duracion OFF");
 		break;
 		case PANT_PERIODO_ON_LLENADO:
 			ST7920_SendString(0, 0, "defina el tiempo");
@@ -117,8 +119,8 @@ void set_pantalla (T_PANTALLA p){
 } //end set_pantalla()
 
 void setTexto_pantalla (char* texto){
-	ST7920_Clear();
-	ST7920_SendString(0, 0, texto);
+	//ST7920_Clear();
+	ST7920_SendString(2, 0, texto);
 	//flag_pantalla = 1;
 }
 

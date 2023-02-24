@@ -16,13 +16,18 @@
 //variables menu
 T_MENU* menuActual;
 T_MENU* menuAux;
+char texto[20];
 //variables tomas
 uint8_t flag_tomas = 0;
 //variables funciones
 T_PROG_OUTPUT aux_progOutput;
 uint8_t pulsoLargo_skimmer = 0;
 uint8_t pulsoLargo_luz = 0;
-
+//variables hora y fecha (PRUEBA)
+RTC_DateTypeDef auxFecha;
+RTC_TimeTypeDef auxHora;
+RTC_DateTypeDef lastFecha;
+RTC_TimeTypeDef lastHora;
 
 void acc_menuPrincipal (void);
 void acc_setLlenado (void);
@@ -44,7 +49,8 @@ void init_config (void);
 
 T_MENU menu[SIZE_MENU_NOMBRE] = {
 		{MENU_PRINCIPAL, NULL, init_menuPrincipal, acc_menuPrincipal}, //MENU_PRINCIPAL
-		{MENU_SET_LLENADO, NULL, init_llenado, acc_llenado}, //MENU_LLENADO
+		{MENU_LLENADO, NULL, init_llenado, acc_llenado}, //MENU_LLENADO
+		{MENU_SET_LLENADO, NULL, init_setLlenado, acc_setLlenado}, //MENU_SET_LLENADO
 		{MENU_SKIMMER, NULL, init_skimmer, acc_skimmer}, //MENU_SKIMMER
 		{MENU_HIDRO, NULL, init_hidro, acc_hidro}, //MENU_HIDRO
 		{MENU_LUCES_EXT, NULL, init_lucesExt, acc_lucesExt}, //MENU_LUCES_EXT
@@ -53,6 +59,7 @@ T_MENU menu[SIZE_MENU_NOMBRE] = {
 };
 
 T_STATUS_LLENADO status_menuLlenado = PREGUNTA_SENSOR;
+T_STATUS_LLENADO status_menuSetLlenado = ELIJE_ON_OFF_LLENADO;
 T_STATUS_SKIMMER status_menuSkimmer = COMPRUEBE_BOMBA;
 T_STATUS_HIDRO status_menuHidro = LIMITE_TIEMPO_HIDRO;
 T_STATUS_LUCESEXT status_menuLucesExt = LIMITE_TIEMPO_LUCESEXT;
@@ -94,7 +101,7 @@ void check_pulsadores (void){
 	if (getStatBoton(IN_napa) == FALL){
 
 		menuAux = menuActual;
-		menuActual = &menu[MENU_SET_LLENADO];
+		menuActual = &menu[MENU_LLENADO];
 		menuActual->menuAnterior = &menu[MENU_PRINCIPAL];
 		menuActual->inicia_menu();
 	} //end if getStatBoton(IN_napa)...
@@ -150,7 +157,7 @@ void check_pulsadores (void){
 		__NOP();
 	}
 
-}
+} //end check_pulsadores ()
 
 /////////////////////////////////////////
 //          INICIALIZADORES            //
@@ -158,23 +165,25 @@ void check_pulsadores (void){
 
 void init_menuPrincipal (void){
 
+	auxFecha = get_fecha();
+	auxHora = get_hora();
+
+	lastFecha = auxFecha;
+	lastHora = auxHora;
+
+	sprintf(texto, "%02i  %02i:%02i:%02i", auxFecha.Date, auxHora.Hours, auxHora.Minutes, auxHora.Seconds );
+
 	set_pantalla(PANT_init_menuPrincipal);
 //	menuActual = &menu[MENU_PRINCIPAL];
+
+	setTexto_pantalla(texto);
 }
 
 
 void init_setLlenado (void){
 
-//	switch (status_menuLlenado) {
-//		case PREGUNTA_SENSOR:
-//			set_pantalla("Sensor conectado?");
-//		break;
-//		default:
-//			set_pantalla("Llenando. terminar?");
-//			//status_menuLlenado = 90;
-//		break;
-//	} //end switch status_menuTablero
 	set_pantalla(PANT_init_setLlenado);
+	status_menuSetLlenado = ELIJE_ON_OFF_LLENADO;
 
 } //end init_llenado()
 
@@ -207,6 +216,7 @@ void init_skimmer (void){
 
 void init_hidro (void){
 	set_pantalla(PANT_init_hidro);
+	status_menuHidro = ELIJE_TIEMPO_HIDRO;
 }
 
 
@@ -238,22 +248,23 @@ void acc_menuPrincipal (void){
 //		return;
 //	}
 
-	//RE VER: debería ejecutar el programa y no configurarlo...
-
 	if (getStatBoton(IN_jet)==FALL){
+		__NOP();
+	}
+
+	if (getStatBoton(IN_A)==FALL){
+		menuAux = menuActual;
+		menuActual = &menu[MENU_SET_LLENADO];
+		menuActual->menuAnterior = &menu[MENU_PRINCIPAL];
+		menuActual->inicia_menu();
+	} //end if getStatBoton(IN_A)
+
+	if (getStatBoton(IN_B)==FALL){
 		menuActual = &menu[MENU_HIDRO];
 		menuActual->menuAnterior = &menu[MENU_PRINCIPAL];
 		menuActual->inicia_menu();
 		return;
-	}
-
-	if (getStatBoton(IN_A)==FALL){
-
-	}
-
-	if (getStatBoton(IN_B)==FALL){
-
-	}
+	} //end if getStatBoton(IN_B)
 
 	if (getStatBoton(IN_C)==FALL){
 
@@ -267,102 +278,63 @@ void acc_menuPrincipal (void){
 	}
 
 	if (runProg_llenado(PROG_CHECK) == PROG_FINISHED){
-		menuActual = &menu[MENU_SET_LLENADO];
+		menuActual = &menu[MENU_LLENADO];
 		menuActual->menuAnterior = &menu[MENU_PRINCIPAL];
 		menuActual->inicia_menu();
 	}
+
+
+	//prueba hora
+
+	auxFecha = get_fecha();
+	auxHora = get_hora();
+
+	if (lastFecha.Date < auxFecha.Date) {
+		lastFecha = auxFecha;
+		lastHora = auxHora;
+		sprintf(texto, "%02i  %02i:%02i:%02i", auxFecha.Date, auxHora.Hours, auxHora.Minutes, auxHora.Seconds );
+		setTexto_pantalla(texto);
+	}
+
+	if (lastHora.Hours < auxHora.Hours) {
+		lastFecha = auxFecha;
+		lastHora = auxHora;
+		sprintf(texto, "%02i  %02i:%02i:%02i", auxFecha.Date, auxHora.Hours, auxHora.Minutes, auxHora.Seconds );
+		setTexto_pantalla(texto);
+	}
+
+	if (lastHora.Minutes < auxHora.Minutes) {
+		lastFecha = auxFecha;
+		lastHora = auxHora;
+		sprintf(texto, "%02i  %02i:%02i:%02i", auxFecha.Date, auxHora.Hours, auxHora.Minutes, auxHora.Seconds);
+		setTexto_pantalla(texto);
+	}
+
+	if (lastHora.Seconds < auxHora.Seconds) {
+		lastFecha = auxFecha;
+		lastHora = auxHora;
+		sprintf(texto, "%02i  %02i:%02i:%02i", auxFecha.Date, auxHora.Hours, auxHora.Minutes, auxHora.Seconds);
+		setTexto_pantalla(texto);
+	}
+
 
 } //end acc_menuPrincipal()
 
 
 void acc_setLlenado (void){
 
-//	switch (status_menuLlenado) {
-//		case PREGUNTA_SENSOR:
-//
-//			if (getStatBoton(IN_HASH) == FALL) { //CONFIRMO
-//				set_pantalla("COMPRUEBE EL SENSOR Y PULSE EL BOTON...");
-//				status_menuLlenado = COMPRUEBE_SENSOR;
-//				break;
-//			}
-//
-//			if (getStatBoton(IN_AST) == FALL) { //niego
-//				set_pantalla("CONECTE EL SENSOR");
-//				status_menuLlenado = CONECTE_SENSOR;
-//				break;
-//			}
-//
-//		break;
-//		case CONECTE_SENSOR:
-//
-//			if (getStatBoton(IN_AST) == FALL) { //volver
-//				//vuelve al menu principal
-//				menuActual = &menu[MENU_PRINCIPAL];
-//				menuActual->inicia_menu();
-//				break;
-//			}
-//
-//			if (getStatBoton(IN_HASH) == FALL) { //CONFIRMO
-//				set_pantalla("¿Sensor conectado?");
-//				status_menuLlenado = PREGUNTA_SENSOR;
-//				break;
-//			}
-//		break;
-//		case COMPRUEBE_SENSOR:
-//
-//			if (getStatBoton(IN_HASH) == FALL) { //CONFIRMO
-//				set_pantalla("llenando...");
-//				status_menuLlenado = LLENANDO;
-//				//funcion de llenado de pileta (biblio de funciones automaticas)
-//				setProg_llenado(PROG_RUN);
-//				break;
-//			}
-//
-//			if (getStatBoton(IN_AST) == FALL) { //volver
-//				set_pantalla("¿Sensor conectado?");
-//				status_menuLlenado = PREGUNTA_SENSOR;
-//				break;
-//			}
-//
-//		break;
-//		case LLENANDO:
-//
-//			if (runProg_llenado(PROG_CHECK) == PROG_FINISHED ) { //LOGICA NEGATIVA
-//				set_pantalla("pileta llena.");
-//				status_menuLlenado = PILETA_LLENA;
-//				break;
-//			}
-//		case PILETA_LLENA:
-//			if (getStatBoton(IN_HASH) == FALL) { //CONFIRMO
-//				//vuelve al menu principal
-//				menuActual = &menu[MENU_PRINCIPAL];
-//				menuActual->inicia_menu();
-//				break;
-//			}
-//
-//			if (getStatBoton(IN_AST) == FALL) { //volver
-//				//vuelve al menu principal
-//				menuActual = &menu[MENU_PRINCIPAL];
-//				menuActual->inicia_menu();
-//				break;
-//			}
-//
-//		default:
-//		break;
-//	} //end switch status_menuLlenado
-
-	switch (status_menuLlenado) {
+	switch (status_menuSetLlenado) {
 
 		case ELIJE_ON_OFF_LLENADO:
 			if (getStatBoton(IN_1) == FALL) {
 				set_pantalla(PANT_PERIODO_ON_LLENADO);
-				status_menuLlenado = PERIODO_ON_LLENADO;
+				status_menuSetLlenado = PERIODO_ON_LLENADO;
 				break;
 			}
 
 			if (getStatBoton(IN_2) == FALL) {
 				set_pantalla(PANT_PERIODO_OFF_LLENADO);
-				status_menuLlenado = PERIODO_OFF_LLENADO;
+				status_menuSetLlenado = PERIODO_OFF_LLENADO;
 				break;
 			}
 
@@ -370,6 +342,7 @@ void acc_setLlenado (void){
 				//vuelve al menu principal
 				menuActual = &menu[MENU_PRINCIPAL];
 				menuActual->inicia_menu();
+				status_menuSetLlenado = PREGUNTA_SENSOR;
 			}
 		break;
 
@@ -379,10 +352,28 @@ void acc_setLlenado (void){
 
 			switch (aux_progOutput) {
 				case PROG_IDLE:
-					status_menuLlenado = ELIJE_ON_OFF_LLENADO;
+					status_menuSetLlenado = ELIJE_ON_OFF_LLENADO;
+					set_pantalla(PANT_init_setLlenado);
 				break;
 				case PROG_FINISHED:
-					status_menuHidro = ELIJE_ON_OFF_LLENADO;
+					status_menuSetLlenado = ELIJE_ON_OFF_LLENADO;
+					set_pantalla(PANT_init_setLlenado);
+				default:
+				break;
+			} //end switch aux_progOutput
+		break;
+		case PERIODO_OFF_LLENADO:
+			//funcion de seteo de periodo off
+			aux_progOutput = setProg_llenado(PROG_SET2);
+
+			switch (aux_progOutput) {
+				case PROG_IDLE:
+					status_menuSetLlenado = ELIJE_ON_OFF_LLENADO;
+					set_pantalla(PANT_init_setLlenado);
+				break;
+				case PROG_FINISHED:
+					status_menuSetLlenado = ELIJE_ON_OFF_LLENADO;
+					set_pantalla(PANT_init_setLlenado);
 				default:
 				break;
 			} //end switch aux_progOutput
@@ -647,10 +638,7 @@ void acc_hidro (void){
 
 			switch (aux_progOutput) {
 				case PROG_IDLE:
-					status_menuHidro = LIMITE_TIEMPO_HIDRO;
-				break;
 				case PROG_FINISHED:
-					status_menuHidro = LIMITE_TIEMPO_HIDRO;
 					menuActual = &menu[MENU_PRINCIPAL];
 					menuActual->inicia_menu();
 				default:
