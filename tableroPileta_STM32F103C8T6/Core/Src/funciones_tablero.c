@@ -23,7 +23,7 @@ RTC_TimeTypeDef auxHora;
 T_PROG_OUTPUT status_progHidro = PROG_IDLE;
 int16_t tiempoHidroAux = 0;
 int16_t tiempoHidro = 0;
-uint8_t statusTiempoHidro = 0;
+uint8_t statusTiempoHidro = 99;
 RTC_TimeTypeDef hora_hidro;
 RTC_DateTypeDef fecha_hidro;
 
@@ -339,6 +339,7 @@ T_PROG_OUTPUT runProg_hidro (T_PROG_CMD cmd){
 
 //				return PROG_FINISHED;
 				status_progHidro = PROG_IDLE;
+				break;
 			}
 
 			if (hora_hidro.Hours < auxHora.Hours){
@@ -347,6 +348,7 @@ T_PROG_OUTPUT runProg_hidro (T_PROG_CMD cmd){
 
 //				return PROG_FINISHED;
 				status_progHidro = PROG_IDLE;
+				break;
 			}
 
 			if (hora_hidro.Minutes < auxHora.Minutes){
@@ -355,7 +357,20 @@ T_PROG_OUTPUT runProg_hidro (T_PROG_CMD cmd){
 
 //				return PROG_FINISHED;
 				status_progHidro = PROG_IDLE;
+				break;
 			}
+
+			if (hora_hidro.Minutes == auxHora.Minutes){
+				if (hora_hidro.Seconds < auxHora.Seconds){
+					setOutput(OUT_rele_jet, 0); //logica positiva
+					set_led(OUT_led_jet, APAGADO);
+
+//					return PROG_FINISHED;
+					status_progHidro = PROG_IDLE;
+					break;
+				}
+			}
+
 		break;
 		case PROG_STOP:
 			setOutput(OUT_rele_jet, 0); //logica positiva
@@ -406,7 +421,7 @@ T_PROG_OUTPUT runProg_llenado (T_PROG_CMD cmd){
 
 			auxFecha = get_fecha();
 			auxHora = get_hora();
-/*
+
 			switch (flag_bombaNapa) {
 				case 1:
 					if (fecha_llenadoOn.Date < auxFecha.Date) {
@@ -425,6 +440,14 @@ T_PROG_OUTPUT runProg_llenado (T_PROG_CMD cmd){
 						setOutput(OUT_rele_napa, 0); //logica positiva
 						set_led(OUT_led_napa, PRENDIDO);
 						flag_bombaNapa = 0;
+					}
+
+					if (hora_llenadoOn.Minutes == auxHora.Minutes) {
+						if (hora_llenadoOn.Seconds < auxHora.Seconds) {
+							setOutput(OUT_rele_napa, 0); //logica positiva
+							set_led(OUT_led_napa, PRENDIDO);
+							flag_bombaNapa = 0;
+						}
 					}
 
 					if (!flag_bombaNapa) {
@@ -461,6 +484,14 @@ T_PROG_OUTPUT runProg_llenado (T_PROG_CMD cmd){
 						flag_bombaNapa = 1;
 					}
 
+					if (hora_llenadoOff.Minutes == auxHora.Minutes) {
+						if (hora_llenadoOff.Seconds < auxHora.Seconds){
+							setOutput(OUT_rele_napa, 1); //logica positiva
+							set_led(OUT_led_napa, TITILA_LENTO);
+							flag_bombaNapa = 1;
+						}
+					}
+
 					if (flag_bombaNapa != 0) {
 						fecha_llenadoOn = get_fecha();
 						hora_llenadoOn = get_hora();
@@ -478,8 +509,8 @@ T_PROG_OUTPUT runProg_llenado (T_PROG_CMD cmd){
 				default:
 				break;
 			} //end switch flag_bombaNapa...
-*/
-			__NOP();
+
+//			__NOP();
 		break;
 		case PROG_STOP:
 			setOutput(OUT_rele_napa, 0); //logica positiva
