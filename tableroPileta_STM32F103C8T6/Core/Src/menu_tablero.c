@@ -23,7 +23,9 @@ uint8_t flag_tomas = 0;
 T_PROG_OUTPUT aux_progOutput;
 uint8_t pulsoLargo_skimmer = 0;
 uint8_t pulsoLargo_luz = 0;
-//variables hora y fecha (PRUEBA)
+//variables de programacion del skimmer
+uint8_t seleccion_progSkimmer = 0;
+//variables hora y fecha
 RTC_DateTypeDef auxFecha;
 RTC_TimeTypeDef auxHora;
 RTC_DateTypeDef lastFecha;
@@ -153,9 +155,9 @@ void check_pulsadores (void){
 	} //end if pulsoLargo_skimmer != 0
 
 
-	if (getStatBoton(IN_pileta) == LOW_L){
-		__NOP();
-	}
+//	if (getStatBoton(IN_pileta) == LOW_L){
+//		__NOP();
+//	}
 
 } //end check_pulsadores ()
 
@@ -211,6 +213,7 @@ void init_llenado (void){
 
 void init_skimmer (void){
 	set_pantalla(PANT_init_skimmer);
+	status_menuSkimmer = COMPRUEBE_BOMBA;
 }
 
 
@@ -267,7 +270,10 @@ void acc_menuPrincipal (void){
 	} //end if getStatBoton(IN_B)
 
 	if (getStatBoton(IN_C)==FALL){
-
+		menuActual = &menu[MENU_SKIMMER];
+		menuActual->menuAnterior = &menu[MENU_PRINCIPAL];
+		menuActual->inicia_menu();
+		return;
 	}
 
 	if (getStatBoton(IN_D)==FALL){
@@ -512,6 +518,7 @@ void acc_skimmer (void){
 				//vuelve al menu principal
 				menuActual = &menu[MENU_PRINCIPAL];
 				menuActual->inicia_menu();
+				break;
 			}
 
 			if (getStatBoton(IN_HASH) == FALL) {
@@ -523,6 +530,9 @@ void acc_skimmer (void){
 		case OPCIONES_SKIMMER:
 			if (getStatBoton(IN_AST) == FALL) {
 				//vuelve al menu principal
+				menuActual = &menu[MENU_PRINCIPAL];
+				menuActual->inicia_menu();
+				break;
 			}
 
 			if (getStatBoton(IN_1) == FALL) {
@@ -558,20 +568,40 @@ void acc_skimmer (void){
 		break;
 		case PERIODO_ON_SKIMMER:
 			//funcion de seteo de periodo on
+			aux_progOutput = setProg_skimmer(PROG_SET1);
+
+			switch (aux_progOutput) {
+				case PROG_IDLE:
+				case PROG_FINISHED:
+					status_menuSkimmer = ELIJE_FRECUENCIA_SKIMMER;
+					set_pantalla(PANT_ELIJE_FRECUENCIA_SKIMMER);
+				default:
+				break;
+			} //end switch aux_progOutput
 		break;
 		case PERIODO_OFF_SKIMMER:
 			//funcion de seteo de periodo off
+			aux_progOutput = setProg_skimmer(PROG_SET2);
+
+			switch (aux_progOutput) {
+				case PROG_IDLE:
+				case PROG_FINISHED:
+					status_menuSkimmer = ELIJE_FRECUENCIA_SKIMMER;
+					set_pantalla(PANT_ELIJE_FRECUENCIA_SKIMMER);
+				default:
+				break;
+			} //end switch aux_progOutput
 		break;
 		case ELIJE_PROGRAMA_SKIMMER:
 			if (getStatBoton(IN_1) == FALL) {
-				//levanta el flag de modificar el programa 1
+				seleccion_progSkimmer = 1; //modifica el programa 1
 				set_pantalla(PANT_ELIJE_ON_OFF_HORARIO_SKIMMER);
 				status_menuSkimmer = ELIJE_ON_OFF_HORARIO_SKIMMER;
 				break;
 			}
 
 			if (getStatBoton(IN_2) == FALL) {
-				//levanta el flag de modificar el programa 2
+				seleccion_progSkimmer = 2; //modifica el programa 2
 				set_pantalla(PANT_ELIJE_ON_OFF_HORARIO_SKIMMER);
 				status_menuSkimmer = ELIJE_ON_OFF_HORARIO_SKIMMER;
 				break;
@@ -585,14 +615,12 @@ void acc_skimmer (void){
 		break;
 		case ELIJE_ON_OFF_HORARIO_SKIMMER:
 			if (getStatBoton(IN_1) == FALL) {
-				//levanta el flag de modificar el horario ON
 				set_pantalla(PANT_HORARIO_ON_SKIMMER);
 				status_menuSkimmer = HORARIO_ON_SKIMMER;
 				break;
 			}
 
 			if (getStatBoton(IN_2) == FALL) {
-				//levanta el flag de modificar el horario OFF
 				set_pantalla(PANT_HORARIO_OFF_SKIMMER);
 				status_menuSkimmer = HORARIO_OFF_SKIMMER;
 				break;
@@ -606,9 +634,46 @@ void acc_skimmer (void){
 		break;
 		case HORARIO_ON_SKIMMER:
 			//funcion de seteo de horario on
+			switch (seleccion_progSkimmer) {
+				case 1:
+					aux_progOutput = setProg_skimmer(PROG_SET3);
+				break;
+				case 2:
+					aux_progOutput = setProg_skimmer(PROG_SET5);
+				default:
+				break;
+			} //end switch seleccion_progSkimmer
+
+			switch (aux_progOutput) {
+				case PROG_IDLE:
+				case PROG_FINISHED:
+					status_menuSkimmer = ELIJE_ON_OFF_HORARIO_SKIMMER;
+					set_pantalla(PANT_ELIJE_ON_OFF_HORARIO_SKIMMER);
+				default:
+				break;
+			} //end switch aux_progOutput
+
 		break;
 		case HORARIO_OFF_SKIMMER:
 			//funcion de seteo de horario off
+			switch (seleccion_progSkimmer) {
+				case 1:
+					aux_progOutput = setProg_skimmer(PROG_SET4);
+				break;
+				case 2:
+					aux_progOutput = setProg_skimmer(PROG_SET6);
+				default:
+				break;
+			} //end switch seleccion_progSkimmer
+
+			switch (aux_progOutput) {
+				case PROG_IDLE:
+				case PROG_FINISHED:
+					status_menuSkimmer = ELIJE_ON_OFF_HORARIO_SKIMMER;
+					set_pantalla(PANT_ELIJE_ON_OFF_HORARIO_SKIMMER);
+				default:
+				break;
+			} //end switch aux_progOutput
 		break;
 	} //end switch status_menuSkimmer
 } //end acc_skimmer()

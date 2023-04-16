@@ -42,6 +42,30 @@ uint8_t flag_bombaNapa = 0;
 //variables pileta/skimmer
 T_PROG_OUTPUT status_progPileta = PROG_IDLE;
 uint8_t status_modoPileta = 0; //0: apagado; 1: con programa; 2: sin programa.
+int16_t tiempoSkimmerAux = 0;
+int16_t tiempoSkimmer_ON = 0;
+int16_t tiempoSkimmer_OFF = 0;
+uint8_t statusTiempoSkimmer = 99;
+RTC_TimeTypeDef hora_skimmerOn;
+RTC_DateTypeDef fecha_skimmerOn;
+RTC_TimeTypeDef hora_skimmerOff;
+RTC_DateTypeDef fecha_skimmerOff;
+int16_t progSkimmerAux = 0;
+int16_t progSkimmerAux2 = 0;
+int16_t prog1_Skimmer_ON = 0;
+int16_t prog1_Skimmer_OFF = 0;
+int16_t prog2_Skimmer_ON = 0;
+int16_t prog2_Skimmer_OFF = 0;
+uint8_t statusProgSkimmer = 99;
+RTC_TimeTypeDef hora_skimmerProg1_On;
+RTC_DateTypeDef fecha_skimmerProg1_On;
+RTC_TimeTypeDef hora_skimmerProg1_Off;
+RTC_DateTypeDef fecha_skimmerProg1_Off;
+RTC_TimeTypeDef hora_skimmerProg2_On;
+RTC_DateTypeDef fecha_skimmerProg2_On;
+RTC_TimeTypeDef hora_skimmerProg2_Off;
+RTC_DateTypeDef fecha_skimmerProg2_Off;
+
 
 /////////////////////////////////////////
 //          INICIALIZADORES            //
@@ -286,7 +310,350 @@ T_PROG_OUTPUT setProg_llenado (T_PROG_CMD cmd){
 
 
 T_PROG_OUTPUT setProg_skimmer (T_PROG_CMD cmd){
-	__NOP();
+
+	int8_t newNumber = getNumber();
+
+	switch (statusTiempoSkimmer) {
+		case 99: //imprime al entrar al sub-menu
+			switch (cmd) {
+				case PROG_SET1:
+					tiempoSkimmerAux = tiempoSkimmer_ON;
+
+					sprintf(texto, "%d min.", tiempoSkimmerAux);
+					setTexto_pantalla(texto);
+					if (!tiempoSkimmerAux){
+						statusTiempoSkimmer = 0;
+						break;
+					}else if (tiempoSkimmerAux < 10){
+						statusTiempoSkimmer = 1;
+						break;
+					}else{
+						statusTiempoSkimmer = 2;
+						break;
+					} //end if !tiempoSkimmerAux
+
+				break;
+				case PROG_SET2:
+					tiempoSkimmerAux = tiempoSkimmer_OFF;
+
+					sprintf(texto, "%d min.", tiempoSkimmerAux);
+					setTexto_pantalla(texto);
+					if (!tiempoSkimmerAux){
+						statusTiempoSkimmer = 0;
+						break;
+					}else if (tiempoSkimmerAux < 10){
+						statusTiempoSkimmer = 1;
+						break;
+					}else{
+						statusTiempoSkimmer = 2;
+						break;
+					} //end if !tiempoSkimmerAux
+
+				break;
+				case PROG_SET3:
+					progSkimmerAux = prog1_Skimmer_ON;
+
+					sprintf(texto, "   %02d:%02d", progSkimmerAux / 100, progSkimmerAux % 100);
+					setTexto_pantalla(texto);
+					if (!progSkimmerAux){
+						statusTiempoSkimmer = 10;
+						break;
+					}else if (progSkimmerAux < 10){
+						statusTiempoSkimmer = 11;
+						break;
+					}else{
+						statusTiempoSkimmer = 12;
+						break;
+					} //end if !tiempoSkimmerAux
+
+				break;
+				case PROG_SET4:
+					progSkimmerAux = prog1_Skimmer_OFF;
+
+					sprintf(texto, "   %02d:%02d", progSkimmerAux / 100, progSkimmerAux % 100);
+					setTexto_pantalla(texto);
+					if (!progSkimmerAux){
+						statusTiempoSkimmer = 10;
+						break;
+					}else if (progSkimmerAux < 10){
+						statusTiempoSkimmer = 11;
+						break;
+					}else{
+						statusTiempoSkimmer = 12;
+						break;
+					} //end if !tiempoSkimmerAux
+
+				break;
+				case PROG_SET5:
+					progSkimmerAux = prog2_Skimmer_ON;
+
+					sprintf(texto, "   %02d:%02d", progSkimmerAux / 100, progSkimmerAux % 100);
+					setTexto_pantalla(texto);
+					if (!progSkimmerAux){
+						statusTiempoSkimmer = 10;
+						break;
+					}else if (progSkimmerAux < 10){
+						statusTiempoSkimmer = 11;
+						break;
+					}else{
+						statusTiempoSkimmer = 12;
+						break;
+					} //end if !tiempoSkimmerAux
+
+				break;
+				case PROG_SET6:
+					progSkimmerAux = prog2_Skimmer_OFF;
+
+					sprintf(texto, "   %02d:%02d", progSkimmerAux / 100, progSkimmerAux % 100);
+					setTexto_pantalla(texto);
+					if (!progSkimmerAux){
+						statusTiempoSkimmer = 10;
+						break;
+					}else if (progSkimmerAux < 10){
+						statusTiempoSkimmer = 11;
+						break;
+					}else{
+						statusTiempoSkimmer = 12;
+						break;
+					} //end if !tiempoSkimmerAux
+
+				default:
+				break;
+			} //end switch cmd
+
+		break;
+		case 0: //tiempo en 0.
+			if (getStatBoton(IN_AST) == FALL) {
+				statusTiempoSkimmer = 99;
+				return PROG_IDLE;
+			}
+
+			if (newNumber > 0) {
+				tiempoSkimmerAux = newNumber;
+				sprintf(texto, "%d min.", tiempoSkimmerAux);
+				setTexto_pantalla(texto);
+				statusTiempoSkimmer = 1;
+			}
+		break;
+		case 1: //lote entre 1 y 9.
+			if (getStatBoton(IN_AST) == FALL) {
+				tiempoSkimmerAux = 0;
+				sprintf(texto, "%d min.", tiempoSkimmerAux);
+				setTexto_pantalla(texto);
+				statusTiempoSkimmer = 0;
+				break;
+			}
+
+			if (getStatBoton(IN_HASH) == FALL) {
+				statusTiempoSkimmer = 3;
+				break;
+			}
+
+			if (newNumber != -1) {
+				tiempoSkimmerAux *= 10;
+				tiempoSkimmerAux += newNumber;
+				sprintf(texto, "%d min.", tiempoSkimmerAux);
+				setTexto_pantalla(texto);
+				statusTiempoSkimmer = 2;
+				break;
+			}
+
+		break;
+		case 2: //lote en 10 o más...
+			if (getStatBoton(IN_AST) == FALL) {
+				tiempoSkimmerAux /= 10;
+				sprintf(texto, "%d min.", tiempoSkimmerAux);
+				setTexto_pantalla(texto);
+				if (tiempoSkimmerAux < 10) {
+					statusTiempoSkimmer = 1;
+				}
+				break;
+			}
+
+			if (getStatBoton(IN_HASH) == FALL) {
+				statusTiempoSkimmer = 3;
+				break;
+			}
+
+			switch (cmd) {
+				case PROG_SET1:
+					if (tiempoSkimmerAux < 30) {
+						if (newNumber != -1) {
+							tiempoSkimmerAux *= 10;
+							tiempoSkimmerAux += newNumber;
+							sprintf(texto, "%d min.", tiempoSkimmerAux);
+							setTexto_pantalla(texto);
+							break;
+						} //end if newNumber...
+					} //end if tiempoSkimmerAux...
+				break;
+				case PROG_SET2:
+					if (tiempoSkimmerAux < 15) {
+						if (newNumber != -1) {
+							tiempoSkimmerAux *= 10;
+							tiempoSkimmerAux += newNumber;
+							sprintf(texto, "%d min.", tiempoSkimmerAux);
+							setTexto_pantalla(texto);
+							break;
+						} //end if newNumber...
+					} //end iftiempoSkimmerAux...
+				break;
+				default:
+				break;
+			} //end switch cmd
+
+		break;
+		case 3: //retorna y graba el valor
+
+			switch (cmd) {
+				case PROG_SET1:
+					tiempoSkimmer_ON = tiempoSkimmerAux;
+				break;
+				case PROG_SET2:
+					tiempoSkimmer_OFF = tiempoSkimmerAux;
+				default:
+				break;
+			} //end switch cmd
+
+			statusTiempoSkimmer = 99;
+			return PROG_FINISHED;
+
+		break;
+		case 10: //hora en 0.
+			if (getStatBoton(IN_AST) == FALL) {
+				statusTiempoSkimmer = 99;
+				return PROG_IDLE;
+			}
+
+			if (newNumber > 0) {
+				progSkimmerAux = newNumber * 100;
+				sprintf(texto, "   %02d:%02d", progSkimmerAux / 100, progSkimmerAux % 100);
+				setTexto_pantalla(texto);
+				statusTiempoSkimmer = 11;
+			}
+		break;
+		case 11: //hora entre 1 y 9.
+			if (getStatBoton(IN_AST) == FALL) {
+				progSkimmerAux = 10;
+				sprintf(texto, "   %02d:%02d", progSkimmerAux / 100, progSkimmerAux % 100);
+				setTexto_pantalla(texto);
+				statusTiempoSkimmer = 10;
+				break;
+			}
+
+			if (getStatBoton(IN_HASH) == FALL) {
+				statusTiempoSkimmer = 33;
+				break;
+			}
+
+			if (newNumber != -1) {
+				progSkimmerAux *= 10;
+				progSkimmerAux += (newNumber * 100);
+				if (progSkimmerAux > 2300)  progSkimmerAux = 2300;
+				sprintf(texto, "   %02d:%02d", progSkimmerAux / 100, progSkimmerAux % 100);
+				setTexto_pantalla(texto);
+				statusTiempoSkimmer = 12;
+				break;
+			}
+
+		break;
+		case 12: //hora en 10 o más... lo sguiente son minutos
+			if (getStatBoton(IN_AST) == FALL) {
+				progSkimmerAux = (progSkimmerAux / 1000) * 100;
+				sprintf(texto, "   %02d:%02d", progSkimmerAux / 100, progSkimmerAux % 100);
+				setTexto_pantalla(texto);
+				if (progSkimmerAux < 1000) {
+					statusTiempoSkimmer = 11;
+				}
+				break;
+			}
+
+			if (getStatBoton(IN_HASH) == FALL) {
+				statusTiempoSkimmer = 33;
+				break;
+			}
+
+			if (newNumber != -1) {
+				progSkimmerAux += 10;
+				sprintf(texto, "   %02d:%02d", progSkimmerAux / 100, progSkimmerAux % 100);
+				setTexto_pantalla(texto);
+				statusTiempoSkimmer = 13;
+				break;
+			}
+
+		case 13: //minutos entre 1 y 9
+			if (getStatBoton(IN_AST) == FALL) {
+				progSkimmerAux = (progSkimmerAux / 100) * 100;
+				sprintf(texto, "   %02d:%02d", progSkimmerAux / 100, progSkimmerAux % 100);
+				setTexto_pantalla(texto);
+				if (progSkimmerAux < 1000) {
+					statusTiempoSkimmer = 11;
+				}
+				break;
+			}
+
+			if (getStatBoton(IN_HASH) == FALL) {
+				statusTiempoSkimmer = 33;
+				break;
+			}
+
+			if (newNumber != -1) {
+				progSkimmerAux2 = newNumber * 10;
+				progSkimmerAux += progSkimmerAux2;
+				sprintf(texto, "   %02d:%02d", progSkimmerAux / 100, progSkimmerAux % 100);
+				setTexto_pantalla(texto);
+				statusTiempoSkimmer = 14;
+				break;
+			}
+
+		case 14: //minutos completos
+			if (getStatBoton(IN_AST) == FALL) {
+				progSkimmerAux -= progSkimmerAux2;
+				sprintf(texto, "   %02d:%02d", progSkimmerAux / 100, progSkimmerAux % 100);
+				setTexto_pantalla(texto);
+				if (!(progSkimmerAux % 100)) {
+					statusTiempoSkimmer = 12;
+				}else{
+					statusTiempoSkimmer = 13;
+				}
+				break;
+			}
+
+			if (getStatBoton(IN_HASH) == FALL) {
+				statusTiempoSkimmer = 33;
+				break;
+			}
+		break;
+		case 33: //retorna y graba el valor
+
+			switch (cmd) {
+				case PROG_SET3:
+					prog1_Skimmer_ON = progSkimmerAux;
+				break;
+				case PROG_SET4:
+					prog1_Skimmer_OFF = progSkimmerAux;
+				break;
+				case PROG_SET5:
+					prog2_Skimmer_ON = progSkimmerAux;
+				break;
+				case PROG_SET6:
+					prog2_Skimmer_OFF = progSkimmerAux;
+				break;
+				default:
+				break;
+			} //end switch cmd
+
+			statusTiempoSkimmer = 99;
+			return PROG_FINISHED;
+
+		break;
+		default:
+			return PROG_ERROR;
+		break;
+	} //end switch statusTiempoLlenado.
+
+	return PROG_BUSY;
+
 } //end setProg_skimmer()
 
 

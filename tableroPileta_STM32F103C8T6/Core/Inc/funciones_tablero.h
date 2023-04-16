@@ -18,6 +18,9 @@ typedef enum{
 	PROG_SET1,
 	PROG_SET2,
 	PROG_SET3,
+	PROG_SET4,
+	PROG_SET5,
+	PROG_SET6,
 }T_PROG_CMD;
 
 typedef enum{

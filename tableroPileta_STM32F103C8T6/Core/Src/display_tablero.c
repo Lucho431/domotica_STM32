@@ -82,16 +82,19 @@ void set_pantalla (T_PANTALLA p){
 			ST7920_SendString(0, 0, "Pileta llena.");
 		break;
 		case PANT_OPCIONES_SKIMMER:
-			ST7920_SendString(0, 0, "Elija freecuecia");
-			ST7920_SendString(1, 0, "u horario");
+			ST7920_SendString(0, 0, "Config. del skimmer:");
+			ST7920_SendString(1, 0, "1) Frecuencia");
+			ST7920_SendString(2, 0, "2) Horario");
 		break;
 		case PANT_ELIJE_FRECUENCIA_SKIMMER:
-			ST7920_SendString(0, 0, "Elijo timepo ON");
-			ST7920_SendString(1, 0, "o timepo OFF");
+			ST7920_SendString(0, 0, "Frec. de skimmer");
+			ST7920_SendString(1, 0, "1) Tiempo en ON");
+			ST7920_SendString(2, 0, "2) Tiempo en OFF");
 		break;
 		case PANT_ELIJE_PROGRAMA_SKIMMER:
-			ST7920_SendString(0, 0, "Elijo programa 1");
-			ST7920_SendString(1, 0, "o programa 2");
+			ST7920_SendString(0, 0, "Elija un programa");
+			ST7920_SendString(1, 0, "1) Programa 1");
+			ST7920_SendString(2, 0, "2) Programa 2");
 		break;
 		case PANT_PERIODO_ON_SKIMMER:
 			ST7920_SendString(0, 0, "Defina el tiempo");
@@ -102,8 +105,9 @@ void set_pantalla (T_PANTALLA p){
 			ST7920_SendString(1, 0, "de duracion OFF:");
 		break;
 		case PANT_ELIJE_ON_OFF_HORARIO_SKIMMER:
-			ST7920_SendString(0, 0, "Elije horario ON");
-			ST7920_SendString(1, 0, "u horario OFF");
+			ST7920_SendString(0, 0, "Elije horario:");
+			ST7920_SendString(1, 0, "1) Horario ON");
+			ST7920_SendString(2, 0, "2) Horario OFF");
 		break;
 		case PANT_HORARIO_ON_SKIMMER:
 			ST7920_SendString(0, 0, "Defina el");
