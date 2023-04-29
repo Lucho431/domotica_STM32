@@ -319,7 +319,7 @@ T_PROG_OUTPUT setProg_skimmer (T_PROG_CMD cmd){
 				case PROG_SET1:
 					tiempoSkimmerAux = tiempoSkimmer_ON;
 
-					sprintf(texto, "%d min.", tiempoSkimmerAux);
+					sprintf(texto, "%d min.  ", tiempoSkimmerAux);
 					setTexto_pantalla(texto);
 					if (!tiempoSkimmerAux){
 						statusTiempoSkimmer = 0;
@@ -336,7 +336,7 @@ T_PROG_OUTPUT setProg_skimmer (T_PROG_CMD cmd){
 				case PROG_SET2:
 					tiempoSkimmerAux = tiempoSkimmer_OFF;
 
-					sprintf(texto, "%d min.", tiempoSkimmerAux);
+					sprintf(texto, "%d min.  ", tiempoSkimmerAux);
 					setTexto_pantalla(texto);
 					if (!tiempoSkimmerAux){
 						statusTiempoSkimmer = 0;
@@ -430,7 +430,7 @@ T_PROG_OUTPUT setProg_skimmer (T_PROG_CMD cmd){
 
 			if (newNumber > 0) {
 				tiempoSkimmerAux = newNumber;
-				sprintf(texto, "%d min.", tiempoSkimmerAux);
+				sprintf(texto, "%d min.  ", tiempoSkimmerAux);
 				setTexto_pantalla(texto);
 				statusTiempoSkimmer = 1;
 			}
@@ -438,7 +438,7 @@ T_PROG_OUTPUT setProg_skimmer (T_PROG_CMD cmd){
 		case 1: //lote entre 1 y 9.
 			if (getStatBoton(IN_AST) == FALL) {
 				tiempoSkimmerAux = 0;
-				sprintf(texto, "%d min.", tiempoSkimmerAux);
+				sprintf(texto, "%d min.  ", tiempoSkimmerAux);
 				setTexto_pantalla(texto);
 				statusTiempoSkimmer = 0;
 				break;
@@ -452,7 +452,7 @@ T_PROG_OUTPUT setProg_skimmer (T_PROG_CMD cmd){
 			if (newNumber != -1) {
 				tiempoSkimmerAux *= 10;
 				tiempoSkimmerAux += newNumber;
-				sprintf(texto, "%d min.", tiempoSkimmerAux);
+				sprintf(texto, "%d min.  ", tiempoSkimmerAux);
 				setTexto_pantalla(texto);
 				statusTiempoSkimmer = 2;
 				break;
@@ -462,7 +462,7 @@ T_PROG_OUTPUT setProg_skimmer (T_PROG_CMD cmd){
 		case 2: //lote en 10 o más...
 			if (getStatBoton(IN_AST) == FALL) {
 				tiempoSkimmerAux /= 10;
-				sprintf(texto, "%d min.", tiempoSkimmerAux);
+				sprintf(texto, "%d min.  ", tiempoSkimmerAux);
 				setTexto_pantalla(texto);
 				if (tiempoSkimmerAux < 10) {
 					statusTiempoSkimmer = 1;
@@ -481,7 +481,7 @@ T_PROG_OUTPUT setProg_skimmer (T_PROG_CMD cmd){
 						if (newNumber != -1) {
 							tiempoSkimmerAux *= 10;
 							tiempoSkimmerAux += newNumber;
-							sprintf(texto, "%d min.", tiempoSkimmerAux);
+							sprintf(texto, "%d min.  ", tiempoSkimmerAux);
 							setTexto_pantalla(texto);
 							break;
 						} //end if newNumber...
@@ -492,7 +492,7 @@ T_PROG_OUTPUT setProg_skimmer (T_PROG_CMD cmd){
 						if (newNumber != -1) {
 							tiempoSkimmerAux *= 10;
 							tiempoSkimmerAux += newNumber;
-							sprintf(texto, "%d min.", tiempoSkimmerAux);
+							sprintf(texto, "%d min.  ", tiempoSkimmerAux);
 							setTexto_pantalla(texto);
 							break;
 						} //end if newNumber...
@@ -519,22 +519,22 @@ T_PROG_OUTPUT setProg_skimmer (T_PROG_CMD cmd){
 			return PROG_FINISHED;
 
 		break;
-		case 10: //hora en 0.
+		case 10: //hora en 0. Introduce la decena de hora
 			if (getStatBoton(IN_AST) == FALL) {
 				statusTiempoSkimmer = 99;
 				return PROG_IDLE;
 			}
 
-			if (newNumber > 0) {
-				progSkimmerAux = newNumber * 100;
+			if (newNumber > -1 && newNumber < 3) {
+				progSkimmerAux = newNumber * 1000;
 				sprintf(texto, "   %02d:%02d", progSkimmerAux / 100, progSkimmerAux % 100);
 				setTexto_pantalla(texto);
 				statusTiempoSkimmer = 11;
 			}
 		break;
-		case 11: //hora entre 1 y 9.
+		case 11: //introduce la unidad de hora
 			if (getStatBoton(IN_AST) == FALL) {
-				progSkimmerAux = 10;
+				progSkimmerAux = 0;
 				sprintf(texto, "   %02d:%02d", progSkimmerAux / 100, progSkimmerAux % 100);
 				setTexto_pantalla(texto);
 				statusTiempoSkimmer = 10;
@@ -546,10 +546,9 @@ T_PROG_OUTPUT setProg_skimmer (T_PROG_CMD cmd){
 				break;
 			}
 
-			if (newNumber != -1) {
-				progSkimmerAux *= 10;
+			if (newNumber > -1) {
 				progSkimmerAux += (newNumber * 100);
-				if (progSkimmerAux > 2300)  progSkimmerAux = 2300;
+				if (progSkimmerAux > 2300) progSkimmerAux = 2300;
 				sprintf(texto, "   %02d:%02d", progSkimmerAux / 100, progSkimmerAux % 100);
 				setTexto_pantalla(texto);
 				statusTiempoSkimmer = 12;
@@ -557,14 +556,12 @@ T_PROG_OUTPUT setProg_skimmer (T_PROG_CMD cmd){
 			}
 
 		break;
-		case 12: //hora en 10 o más... lo sguiente son minutos
+		case 12: //introduce la decena de minutos
 			if (getStatBoton(IN_AST) == FALL) {
-				progSkimmerAux = (progSkimmerAux / 1000) * 100;
+				progSkimmerAux = (progSkimmerAux / 1000) * 1000;
 				sprintf(texto, "   %02d:%02d", progSkimmerAux / 100, progSkimmerAux % 100);
 				setTexto_pantalla(texto);
-				if (progSkimmerAux < 1000) {
-					statusTiempoSkimmer = 11;
-				}
+				statusTiempoSkimmer = 11;
 				break;
 			}
 
@@ -573,22 +570,20 @@ T_PROG_OUTPUT setProg_skimmer (T_PROG_CMD cmd){
 				break;
 			}
 
-			if (newNumber != -1) {
-				progSkimmerAux += 10;
+			if (newNumber != -1 && newNumber < 6) {
+				progSkimmerAux += (newNumber * 10);
 				sprintf(texto, "   %02d:%02d", progSkimmerAux / 100, progSkimmerAux % 100);
 				setTexto_pantalla(texto);
 				statusTiempoSkimmer = 13;
 				break;
 			}
 
-		case 13: //minutos entre 1 y 9
+		case 13: //introduce la unidad de minutos
 			if (getStatBoton(IN_AST) == FALL) {
 				progSkimmerAux = (progSkimmerAux / 100) * 100;
 				sprintf(texto, "   %02d:%02d", progSkimmerAux / 100, progSkimmerAux % 100);
 				setTexto_pantalla(texto);
-				if (progSkimmerAux < 1000) {
-					statusTiempoSkimmer = 11;
-				}
+				statusTiempoSkimmer = 12;
 				break;
 			}
 
@@ -598,8 +593,7 @@ T_PROG_OUTPUT setProg_skimmer (T_PROG_CMD cmd){
 			}
 
 			if (newNumber != -1) {
-				progSkimmerAux2 = newNumber * 10;
-				progSkimmerAux += progSkimmerAux2;
+				progSkimmerAux += newNumber;
 				sprintf(texto, "   %02d:%02d", progSkimmerAux / 100, progSkimmerAux % 100);
 				setTexto_pantalla(texto);
 				statusTiempoSkimmer = 14;
@@ -608,14 +602,10 @@ T_PROG_OUTPUT setProg_skimmer (T_PROG_CMD cmd){
 
 		case 14: //minutos completos
 			if (getStatBoton(IN_AST) == FALL) {
-				progSkimmerAux -= progSkimmerAux2;
+				progSkimmerAux = (newNumber / 10) * 10;
 				sprintf(texto, "   %02d:%02d", progSkimmerAux / 100, progSkimmerAux % 100);
 				setTexto_pantalla(texto);
-				if (!(progSkimmerAux % 100)) {
-					statusTiempoSkimmer = 12;
-				}else{
-					statusTiempoSkimmer = 13;
-				}
+				statusTiempoSkimmer = 13;
 				break;
 			}
 
