@@ -140,7 +140,7 @@ void check_pulsadores (void){
 			pulsoLargo_skimmer = 0;
 		}
 
-		if (pulsoLargo_skimmer == 1){ //pulso largo, justo 10 ms antes de terminar
+		if (pulsoLargo_skimmer == 1){ //pulso largo, justo 10 ms antes de terminar la cuenta regresiva de pulsoLargo_skimmer.
 			if (getStatBoton(IN_pileta) == LOW_L){ //doble check
 				runProg_skimmer(PROG_SET2); //sin programa
 			}

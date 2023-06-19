@@ -45,18 +45,18 @@ uint8_t status_modoPileta = 0; //0: apagado; 1: con programa; 2: sin programa.
 int16_t tiempoSkimmerAux = 0;
 int16_t tiempoSkimmer_ON = 0;
 int16_t tiempoSkimmer_OFF = 0;
-uint8_t statusTiempoSkimmer = 99;
+uint8_t statusTiempoSkimmer = 99; //son los pasos intermedios para la entrada numerica de la programacion
 RTC_TimeTypeDef hora_skimmerOn;
 RTC_DateTypeDef fecha_skimmerOn;
 RTC_TimeTypeDef hora_skimmerOff;
 RTC_DateTypeDef fecha_skimmerOff;
 int16_t progSkimmerAux = 0;
 int16_t progSkimmerAux2 = 0;
-int16_t prog1_Skimmer_ON = 0;
-int16_t prog1_Skimmer_OFF = 0;
-int16_t prog2_Skimmer_ON = 0;
-int16_t prog2_Skimmer_OFF = 0;
-uint8_t statusProgSkimmer = 99;
+int16_t prog1_Skimmer_ON = 0; // almancena en formato HH:MM la hora ON
+int16_t prog1_Skimmer_OFF = 0; // almancena en formato HH:MM la hora OFF
+int16_t prog2_Skimmer_ON = 0; // almancena en formato HH:MM la hora ON
+int16_t prog2_Skimmer_OFF = 0; // almancena en formato HH:MM la hora OFF
+//uint8_t statusProgSkimmer = 99;
 RTC_TimeTypeDef hora_skimmerProg1_On;
 RTC_DateTypeDef fecha_skimmerProg1_On;
 RTC_TimeTypeDef hora_skimmerProg1_Off;
@@ -65,7 +65,8 @@ RTC_TimeTypeDef hora_skimmerProg2_On;
 RTC_DateTypeDef fecha_skimmerProg2_On;
 RTC_TimeTypeDef hora_skimmerProg2_Off;
 RTC_DateTypeDef fecha_skimmerProg2_Off;
-
+uint8_t progSkimmer_activo = 0; //indica cual programa se encuentra en la franja horaria actual. 0: ninguno; 1: prog1; 2: prog2; 3: ambos.
+uint8_t flag_skimmer = 0;
 
 /////////////////////////////////////////
 //          INICIALIZADORES            //
@@ -577,7 +578,7 @@ T_PROG_OUTPUT setProg_skimmer (T_PROG_CMD cmd){
 				statusTiempoSkimmer = 13;
 				break;
 			}
-
+		break;
 		case 13: //introduce la unidad de minutos
 			if (getStatBoton(IN_AST) == FALL) {
 				progSkimmerAux = (progSkimmerAux / 100) * 100;
@@ -599,10 +600,10 @@ T_PROG_OUTPUT setProg_skimmer (T_PROG_CMD cmd){
 				statusTiempoSkimmer = 14;
 				break;
 			}
-
+		break;
 		case 14: //minutos completos
 			if (getStatBoton(IN_AST) == FALL) {
-				progSkimmerAux = (newNumber / 10) * 10;
+				progSkimmerAux = (progSkimmerAux / 10) * 10;
 				sprintf(texto, "   %02d:%02d", progSkimmerAux / 100, progSkimmerAux % 100);
 				setTexto_pantalla(texto);
 				statusTiempoSkimmer = 13;
@@ -896,19 +897,40 @@ T_PROG_OUTPUT runProg_skimmer (T_PROG_CMD cmd){
 		case PROG_SET1: //con programa
 			status_modoPileta = 1;
 			status_progPileta = PROG_BUSY;
-			set_led(OUT_led_pileta, TITILA_LENTO);
-			break;
+
+			flag_skimmer = 0;
+			fecha_skimmerOff = get_fecha();
+			hora_skimmerOff = get_hora();
+
+//			hora_skimmerOff.Seconds++;
+//			if (hora_skimmerOff.Seconds > 59) {
+//				hora_skimmerOff.Seconds -= 59;
+//				hora_skimmerOff.Minutes++;
+//				if (hora_skimmerOff.Minutes > 59) {
+//					hora_skimmerOff.Minutes -= 59;
+//					hora_skimmerOff.Hours++;
+//					if (hora_skimmerOff.Hours > 23) {
+//						hora_skimmerOff.Hours -= 23;
+//						fecha_skimmerOff.Date++;
+//					}
+//				}
+//			} //end if hora_skimmerOff...
+
+			setOutput(OUT_rele_pileta, 0); //LOGICA POSITIVA
+			set_led(OUT_led_pileta, PRENDIDO);
+		break;
 		case PROG_SET2: //sin programa
 			status_modoPileta = 2;
 			status_progPileta = PROG_BUSY;
 			set_led(OUT_led_pileta, TITILA_RAPIDO);
-			break;
+
+		break;
 		case PROG_STOP:
 			setOutput(OUT_rele_pileta, 0); //LOGICA POSITIVA
 			set_led(OUT_led_pileta, APAGADO);
 			status_modoPileta = 0;
 			status_progPileta = PROG_IDLE;
-			break;
+		break;
 		case PROG_CHECK:
 			if (status_progPileta == PROG_IDLE){
 				//return PROG_IDLE;
@@ -917,20 +939,149 @@ T_PROG_OUTPUT runProg_skimmer (T_PROG_CMD cmd){
 
 			switch (status_modoPileta) {
 				case 0:
-
+					setOutput(OUT_rele_pileta, 0); //logica positiva
 					break;
 				case 1:
-					setOutput(OUT_rele_pileta, 1); //logica positiva
-					break;
+					auxFecha = get_fecha();
+					auxHora = get_hora();
+
+					//compruebo estar en el prog1
+					progSkimmer_activo = 0;
+					if ( (prog1_Skimmer_ON / 100) <= auxHora.Hours){
+						if ( (prog1_Skimmer_ON % 100) <= auxHora.Minutes){
+							progSkimmer_activo = 1;
+						} //end if auxHora.Minutes
+					} //end if auxHora.Hours
+					if ( (prog1_Skimmer_OFF / 100) <= auxHora.Hours){
+						if ( (prog1_Skimmer_OFF % 100) <= auxHora.Minutes){
+							progSkimmer_activo = 0;
+						} //end if auxHora.Minutes
+					} //end if auxHora.Hours
+
+					//compruebo estar en el prog2
+					if ( (prog2_Skimmer_ON / 100) <= auxHora.Hours){
+						if ( (prog2_Skimmer_ON % 100) <= auxHora.Minutes){
+							progSkimmer_activo += 2;
+						} //end if auxHora.Minutes
+					} //end if auxHora.Hours
+					if ( (prog2_Skimmer_OFF / 100) <= auxHora.Hours){
+						if ( (prog2_Skimmer_OFF % 100) <= auxHora.Minutes){
+							progSkimmer_activo -= 2;
+						} //end if auxHora.Minutes
+					} //end if auxHora.Hours
+
+					//defino si prendo o apago la salida
+					if (progSkimmer_activo != 0){
+
+						auxFecha = get_fecha();
+						auxHora = get_hora();
+
+						switch (flag_skimmer){
+							case 0:
+								if (fecha_skimmerOff.Date < auxFecha.Date) {
+									setOutput(OUT_rele_pileta, 1); //logica positiva
+									set_led(OUT_led_pileta, TITILA_LENTO);
+									flag_skimmer = 1;
+								}
+
+								if (hora_skimmerOff.Hours < auxHora.Hours) {
+									setOutput(OUT_rele_pileta, 1); //logica positiva
+									set_led(OUT_led_pileta, TITILA_LENTO);
+									flag_skimmer = 1;
+								}
+
+								if (hora_skimmerOff.Minutes < auxHora.Minutes) {
+									setOutput(OUT_rele_pileta, 1); //logica positiva
+									set_led(OUT_led_pileta, TITILA_LENTO);
+									flag_skimmer = 1;
+								}
+
+								if (hora_skimmerOff.Minutes == auxHora.Minutes) {
+									if (hora_skimmerOff.Seconds < auxHora.Seconds){
+										setOutput(OUT_rele_pileta, 1); //logica positiva
+										set_led(OUT_led_pileta, TITILA_LENTO);
+										flag_skimmer = 1;
+									}
+								}
+
+								if (flag_skimmer != 0) {
+									fecha_skimmerOn = auxFecha;
+									hora_skimmerOn = auxHora;
+
+									hora_skimmerOn.Minutes += tiempoSkimmer_ON;
+									if (hora_skimmerOn.Minutes > 59) {
+										hora_skimmerOn.Minutes -= 59;
+										hora_skimmerOn.Hours++;
+										if (hora_skimmerOn.Hours > 23) {
+											hora_skimmerOn.Hours -= 23;
+											fecha_skimmerOn.Date++;
+										}
+									} //end if hora_skimmerOn...
+								} //end if flag_skimmer...
+
+							break;
+							case 1:
+								if (fecha_skimmerOn.Date < auxFecha.Date) {
+									setOutput(OUT_rele_pileta, 0); //logica positiva
+									set_led(OUT_led_pileta, PRENDIDO);
+									flag_skimmer = 0;
+								}
+
+								if (hora_skimmerOn.Hours < auxHora.Hours) {
+									setOutput(OUT_rele_pileta, 0); //logica positiva
+									set_led(OUT_led_pileta, PRENDIDO);
+									flag_skimmer = 0;
+								}
+
+								if (hora_skimmerOn.Minutes < auxHora.Minutes) {
+									setOutput(OUT_rele_pileta, 0); //logica positiva
+									set_led(OUT_led_pileta, PRENDIDO);
+									flag_skimmer = 0;
+								}
+
+								if (hora_skimmerOn.Minutes == auxHora.Minutes) {
+									if (hora_skimmerOn.Seconds < auxHora.Seconds) {
+										setOutput(OUT_rele_pileta, 0); //logica positiva
+										set_led(OUT_led_pileta, PRENDIDO);
+										flag_skimmer = 0;
+									}
+								}
+
+								if (!flag_skimmer) {
+									fecha_skimmerOff = auxFecha;
+									hora_skimmerOff = auxHora;
+
+									hora_skimmerOff.Minutes += tiempoSkimmer_OFF;
+									if (hora_skimmerOff.Minutes > 59) {
+										hora_skimmerOff.Minutes -= 59;
+										hora_skimmerOff.Hours++;
+										if (hora_skimmerOff.Hours > 23) {
+											hora_skimmerOff.Hours -= 23;
+											fecha_skimmerOff.Date++;
+										}
+									} //end if hora_skimmerOff...
+								} //end if flag_skimmer...
+
+							break;
+							default:
+							break;
+						} //end switch flag_skimmer
+
+					}else{
+						setOutput(OUT_rele_pileta, 0); //logica positiva
+						set_led(OUT_led_pileta, PRENDIDO);
+					} //end if progSkimmer_activo
+
+				break;
 				case 2:
 					setOutput(OUT_rele_pileta, 1); //logica positiva
-					break;
+				break;
 				default:
-					break;
+				break;
 			}
 
 		default:
-			break;
+		break;
 	} //end switch cmd
 
 	return status_progPileta;
