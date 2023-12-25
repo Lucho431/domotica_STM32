@@ -5,4 +5,4 @@ funciones_tablero.c:651:15:setProg_luz	16	static,ignoring_inline_asm
 funciones_tablero.c:659:15:runProg_hidro	16	static
 funciones_tablero.c:748:15:runProg_llenado	16	static
 funciones_tablero.c:893:15:runProg_skimmer	16	static,ignoring_inline_asm
-funciones_tablero.c:1090:15:runProg_luz	16	static,ignoring_inline_asm
+funciones_tablero.c:1093:15:runProg_luz	16	static,ignoring_inline_asm

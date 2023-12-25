@@ -961,12 +961,14 @@ T_PROG_OUTPUT runProg_skimmer (T_PROG_CMD cmd){
 					//compruebo estar en el prog2
 					if ( (prog2_Skimmer_ON / 100) <= auxHora.Hours){
 						if ( (prog2_Skimmer_ON % 100) <= auxHora.Minutes){
-							progSkimmer_activo += 2;
+//							progSkimmer_activo += 2;
+							progSkimmer_activo |= 0b10;
 						} //end if auxHora.Minutes
 					} //end if auxHora.Hours
 					if ( (prog2_Skimmer_OFF / 100) <= auxHora.Hours){
 						if ( (prog2_Skimmer_OFF % 100) <= auxHora.Minutes){
-							progSkimmer_activo -= 2;
+//							progSkimmer_activo -= 2;
+							progSkimmer_activo &= (uint8_t) (~0b10);
 						} //end if auxHora.Minutes
 					} //end if auxHora.Hours
 
@@ -1070,6 +1072,7 @@ T_PROG_OUTPUT runProg_skimmer (T_PROG_CMD cmd){
 					}else{
 						setOutput(OUT_rele_pileta, 0); //logica positiva
 						set_led(OUT_led_pileta, PRENDIDO);
+						flag_skimmer = 0;
 					} //end if progSkimmer_activo
 
 				break;

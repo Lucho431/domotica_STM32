@@ -4,6 +4,9 @@
 
 #include "stdint.h"
 
+
+#define CARITA 1
+
 uint8_t image[(128 * 64)/8];
 
 // A replacement for SPI_TRANSMIT
@@ -23,6 +26,13 @@ void ST7920_SendData (uint8_t data);
  * 'col' = starting COL for the string (from 0 to 7)
  */
 void ST7920_SendString(int row, int col, char* string);
+
+
+/* set cursor to the LCD
+ * 'row' = starting ROW for the string (from 0 to 3)
+ * 'col' = starting COL for the string (from 0 to 7)
+ */
+void ST7920_SetCursor(int row, int col);
 
 
 /* ENABLE or DISABLE the graphic mode

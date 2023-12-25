@@ -112,6 +112,30 @@ void ST7920_SendString(int row, int col, char* string)
 }
 
 
+void ST7920_SetCursor(int row, int col)
+{
+    switch (row)
+    {
+        case 0:
+            col |= 0x80;
+            break;
+        case 1:
+            col |= 0x90;
+            break;
+        case 2:
+            col |= 0x88;
+            break;
+        case 3:
+            col |= 0x98;
+            break;
+        default:
+            col |= 0x80;
+            break;
+    }
+
+    ST7920_SendCmd(col);
+}
+
 
 // switch to graphic mode or normal mode::: enable = 1 -> graphic mode enable = 0 -> normal mode
 
